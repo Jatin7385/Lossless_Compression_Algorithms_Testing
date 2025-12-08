@@ -12,6 +12,56 @@ Rough test results and insights mentioned below. Structured results present in o
 | 1 | 0 | 22 |   92.16% |   0.001427s |     0.002170 MB |  92.1617 |
 | 11 | 2 | 19 |   95.60% |   0.335548s |     0.002226 MB |  95.6035 |
 
+## Brotli Tunable parameters and what their ranges mean : 
+- quality (0–11)
+Meaning:
+
+Determines the compression effort vs speed trade-off.
+
+Higher quality → algorithm searches more for repeated patterns → smaller files → slower compression.
+Lower quality → faster compression, less optimal size reduction.
+Range: 0–11
+
+Quality	Behavior
+0–4	Very fast, low compression. Good for streaming or low-latency applications.
+5–8	Balanced — decent compression without extreme compute cost. Often used in CDNs.
+9–11	Maximum compression — best for build-time/pre-compression. Slower but reduces file size the most.
+
+Theoretical impact:
+Controls how deeply the algorithm searches for redundancies.
+Think of it as “how hard should Brotli work to shrink the file?”
+
+- mode (0–2)
+Meaning:
+Gives Brotli a hint about the type of data to optimize compression strategy.
+There are only three modes:
+- Mode	Value	Theoretical meaning
+- Generic	0	Default. Treats input as arbitrary data, balances compression heuristics.
+- Text	1	Optimized for UTF-8 text. Looks for language patterns, spaces, repeated words.
+- Font	2	Optimized for WOFF/WOFF2 fonts. Handles repeated font glyph patterns efficiently.
+
+Theoretical impact:
+Adjusts pattern search heuristics and probability models based on data type.
+Using the right mode = slightly better compression and faster processing.
+
+- lgwin (10–24)
+Meaning:
+Sets the size of the sliding window (dynamic dictionary).
+
+Brotli stores the most recent 2^lgwin bytes in memory to reference repeated patterns.
+
+Range: 10–24 → window = 2^lgwin bytes
+
+lgwin	Window size	Use case / impact
+10	1 KB	Tiny window. Good for small files, fast, but misses long-range redundancy.
+16	64 KB	Similar to Gzip default. Medium compression for moderately sized files.
+19	512 KB	Large enough for typical JS bundles or HTML templates.
+22	4 MB	Large files, highly repetitive. Can detect far-apart patterns → better compression.
+24	16 MB	Maximum window size. Best for huge repetitive content. Slower, more memory needed.
+
+Theoretical impact:
+Larger window → more long-range pattern detection → higher compression ratio.
+Smaller window → less memory, faster compression, might miss patterns.
 
 
 ## Lossless compression test with entire Form JSON
@@ -259,6 +309,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
