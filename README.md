@@ -4,13 +4,24 @@ Playing around with the most common lossless compression algorithms. Was interes
 Rough test results and insights mentioned below. Structured results present in our blog.
 
 
-## Brotli Grid search on tunable parameters : 
+## Brotli Grid search on tunable parameters for Form Model JSON : 
 
-Optimized For| Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+Optimized For| Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Percentage |
 |------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
 |Minimum Time| 0 | 1 | 23 |   91.10% |   0.001210s |     0.002618 MB |  91.0992 |
 |Minimum Peak Memory| 1 | 0 | 22 |   92.16% |   0.001427s |     0.002170 MB |  92.1617 |
 |Maximum Compression Percentage| 11 | 2 | 19 |   95.60% |   0.335548s |     0.002226 MB |  95.6035 |
+
+- Higher quality : Higher Compression Percentage : Slower Compression
+- Lower Quality : Lower compression percentage : Faster compression
+- Mode : 0 : Generic :: Treats input as arbitrary data.
+- Mode : 1 : Text :: Optimized for UTF-8
+- Mode : 2 : Font :: Optimized for WOFF/WOFF2 fonts
+- Lgwin : Size of sliding window
+- Lower Lgwin : Smaller Sliding window of dictionary : Faster compression : Lower Compression Percentage
+- Higher Lgwin : Larger Sliding window of dictionary : Slower compression : Higher Compression Percentage
+
+
 
 ## Brotli Tunable parameters and what their ranges mean : 
 - quality (0–11)
@@ -309,6 +320,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
