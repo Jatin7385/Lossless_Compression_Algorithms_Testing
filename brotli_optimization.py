@@ -115,16 +115,11 @@ class BrotliOptimizer:
         """
         Print the optimal results.
         """
-        print(f"------------------------------------------------------------------------------------------------------------------")
         print(f"| Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |")
-        print(f"------------------------------------------------------------------------------------------------------------------")
+        print(f"|---------|------|-------|------------------------|------------|-------------------|-------------------|")
         print(f"| {optimalResults['optimizedTime'].quality} | {optimalResults['optimizedTime'].mode} | {optimalResults['optimizedTime'].lgwin} | {optimalResults['optimizedTime'].compressionPercentage:>7.2f}% | {optimalResults['optimizedTime'].timeTaken:>10.6f}s | {optimalResults['optimizedTime'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedTime'].compressionPercentage:>8.4f}")
-        print(f"------------------------------------------------------------------------------------------------------------------")
         print(f"| {optimalResults['optimizedPeakMemory'].quality} | {optimalResults['optimizedPeakMemory'].mode} | {optimalResults['optimizedPeakMemory'].lgwin} | {optimalResults['optimizedPeakMemory'].compressionPercentage:>7.2f}% | {optimalResults['optimizedPeakMemory'].timeTaken:>10.6f}s | {optimalResults['optimizedPeakMemory'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedPeakMemory'].compressionPercentage:>8.4f}")
-        print(f"------------------------------------------------------------------------------------------------------------------")
         print(f"| {optimalResults['optimizedCompressionPercentage'].quality} | {optimalResults['optimizedCompressionPercentage'].mode} | {optimalResults['optimizedCompressionPercentage'].lgwin} | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>7.2f}% | {optimalResults['optimizedCompressionPercentage'].timeTaken:>10.6f}s | {optimalResults['optimizedCompressionPercentage'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>8.4f}")
-        print(f"------------------------------------------------------------------------------------------------------------------")
-
 
 def main():
     # Read the data from the file
