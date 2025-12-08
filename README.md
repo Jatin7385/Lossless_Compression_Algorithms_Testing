@@ -3,6 +3,17 @@ Playing around with the most common lossless compression algorithms. Was interes
 
 Rough test results and insights mentioned below. Structured results present in our blog.
 
+
+## Brotli Grid search on tunable parameters : 
+
+| Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|---------|------|-------|------------------------|------------|-------------------|-------------------|
+| 0 | 1 | 23 |   91.10% |   0.001210s |     0.002618 MB |  91.0992 |
+| 1 | 0 | 22 |   92.16% |   0.001427s |     0.002170 MB |  92.1617 |
+| 11 | 2 | 19 |   95.60% |   0.335548s |     0.002226 MB |  95.6035 |
+
+
+
 ## Lossless compression test with entire Form JSON
 ### Code : 
 <img width="861" height="465" alt="image" src="https://github.com/user-attachments/assets/f0ecef56-0a83-4baf-b39d-23642e6e13c4" />
@@ -248,5 +259,6 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
