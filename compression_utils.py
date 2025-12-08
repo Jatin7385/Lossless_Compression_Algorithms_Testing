@@ -83,26 +83,47 @@ def zstdProcessing(text: str, level: int = 3) -> bytes:
 
 
 
-def brotliProcessing(text: str) -> bytes:
+def brotliProcessing(text: str, printFlag = True, quality: int = 11, mode: int = 0, lgwin: int = 22) -> dict:
     # ------------------- Compression/Decompression -------------------
-    print("Original size:", len(text.encode('utf-8')), "bytes")
+    if printFlag:
+        print("Original size:", len(text.encode('utf-8')), "bytes")
+
+    mode_dict = {
+        0: brotli.MODE_GENERIC,
+        1: brotli.MODE_TEXT,
+        2: brotli.MODE_FONT
+    }
 
     # Compress
-    compressed = brotli.compress(text.encode('utf-8'))
-    print("Compressed size:", len(compressed), "bytes")
+    compressed = brotli.compress(text.encode('utf-8'), quality=quality, mode=mode_dict[mode], lgwin=lgwin)
+    
+    if printFlag:
+        print("Compressed size:", len(compressed), "bytes")
 
     # Decompress
     decompressed = brotli.decompress(compressed)
-    print("Decompressed size:", len(decompressed), "bytes")
+    
+    if printFlag:
+        print("Decompressed size:", len(decompressed), "bytes")
 
     # Percentage of compression reduced
     percentage_reduced = (len(text.encode('utf-8')) - len(compressed)) / len(text.encode('utf-8')) * 100
-    print("Percentage of compression reduced:", percentage_reduced, "%")
+    
+    if printFlag:
+        print("Percentage of compression reduced:", percentage_reduced, "%")
 
     # Verify
     assert decompressed == text.encode('utf-8')
-    print("Decompression verified ✅")
-    print("Compressed size:", len(compressed), "bytes")
+    if printFlag:
+        print("Decompression verified ✅")
+    if printFlag:
+        print("Compressed size:", len(compressed), "bytes")
+
+    return {
+        'compression_percentage': percentage_reduced,
+        'compressed_size': len(compressed),
+        'compression_ratio': len(compressed) / len(text.encode('utf-8'))
+    }
 
 def snappyProcessing(text: str) -> bytes:
     """
