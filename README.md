@@ -6,11 +6,11 @@ Rough test results and insights mentioned below. Structured results present in o
 
 ## Brotli Grid search on tunable parameters : 
 
-| Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
-|---------|------|-------|------------------------|------------|-------------------|-------------------|
-| 0 | 1 | 23 |   91.10% |   0.001210s |     0.002618 MB |  91.0992 |
-| 1 | 0 | 22 |   92.16% |   0.001427s |     0.002170 MB |  92.1617 |
-| 11 | 2 | 19 |   95.60% |   0.335548s |     0.002226 MB |  95.6035 |
+Optimized For| Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
+|Minimum Time| 0 | 1 | 23 |   91.10% |   0.001210s |     0.002618 MB |  91.0992 |
+|Minimum Peak Memory| 1 | 0 | 22 |   92.16% |   0.001427s |     0.002170 MB |  92.1617 |
+|Maximum Compression Percentage| 11 | 2 | 19 |   95.60% |   0.335548s |     0.002226 MB |  95.6035 |
 
 ## Brotli Tunable parameters and what their ranges mean : 
 - quality (0–11)
@@ -309,6 +309,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
