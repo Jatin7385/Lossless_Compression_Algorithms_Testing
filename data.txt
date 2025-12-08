@@ -1,0 +1,6 @@
+{
+    "user": "jatin",
+    "email": "jatin@example.com",
+    "role": "admin",
+    "permissions": ["read","write","delete"]
+}
