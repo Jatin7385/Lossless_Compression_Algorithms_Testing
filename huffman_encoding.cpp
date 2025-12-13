@@ -198,17 +198,27 @@ string get_encoded_text(string text, unordered_map<char, string>& huffmanCode)
     return encoded_text;
 }
 
-// string get_decoded_text(string encoded_text, Node* root)
-// {
-//     string decoded_text = "";
-//     Node* current = root;
-//     for (char c : encoded_text) {
-//         if (c == '0') {
-//             current = current->left;
-//         }
-//     }
-//     return decoded_text;
-// }
+// traverse the Huffman Tree and decode the encoded string
+void decode(Node* root, int &index, string str, string& decoded_text)
+{
+	if (root == nullptr) {
+		return;
+	}
+
+	// found a leaf node
+	if (!root->left && !root->right)
+	{
+		decoded_text += root->data;
+		return;
+	}
+
+	index++;
+
+	if (str[index] =='0')
+		decode(root->left, index, str, decoded_text);
+	else
+		decode(root->right, index, str, decoded_text);
+}
 
 // Main function
 int main()
@@ -232,8 +242,14 @@ int main()
     std::cout << "Encoded Text : " << encoded_text << std::endl;
 
     // Decode the Encoded Text
-    // string decoded_text = get_decoded_text(encoded_text, root);
-    // std::cout << "Decoded Text : " << decoded_text << std::endl;
+    // traverse the Huffman Tree again and this time
+	// decode the encoded string
+	int index = -1;
+	string decoded_text = "";
+	while (index < (int)encoded_text.size() - 2) {
+		decode(root, index, encoded_text, decoded_text);
+	}
+	std::cout << "Decoded Text : " << decoded_text << std::endl;
 }
 
 // Execute on MacOS - clang++ huffman_encoding.cpp -o huffman_encoding
