@@ -6,6 +6,9 @@ Rough test results and insights mentioned below. Structured results present in o
 ## Huffman Encoding
 <img width="1151" height="382" alt="image" src="https://github.com/user-attachments/assets/a45305b8-415f-438c-8c23-7164574a5032" />
 
+## LZ77 Compression
+<img width="1680" height="604" alt="image" src="https://github.com/user-attachments/assets/96bc8c2e-d13f-4328-950a-8f59e27b7581" />
+
 
 ## Brotli Grid search on tunable parameters for Form Model JSON : 
 
@@ -323,6 +326,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
