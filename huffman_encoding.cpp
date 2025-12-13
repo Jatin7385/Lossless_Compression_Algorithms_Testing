@@ -285,7 +285,9 @@ int main()
     
     
     // Input text
-    string text = "Huffman";
+    string text = "Huffman Encoding is a lossless compression algorithm.";
+
+    cout << "Original Text : " << text << endl;
 
     // Count the frequency of each character in the input text
     count_frequency(text, freq_map);
