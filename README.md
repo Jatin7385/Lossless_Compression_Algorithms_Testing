@@ -7,7 +7,11 @@ Rough test results and insights mentioned below. Structured results present in o
 <img width="1151" height="382" alt="image" src="https://github.com/user-attachments/assets/a45305b8-415f-438c-8c23-7164574a5032" />
 
 ## LZ77 Compression
+### Expansion of compressed data size
 <img width="1680" height="604" alt="image" src="https://github.com/user-attachments/assets/96bc8c2e-d13f-4328-950a-8f59e27b7581" />
+
+### No Expansion of compressed data size
+<img width="1700" height="241" alt="image" src="https://github.com/user-attachments/assets/318c911f-bfa6-40f6-8270-7a340a79017e" />
 
 
 ## Brotli Grid search on tunable parameters for Form Model JSON : 
@@ -326,6 +330,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
