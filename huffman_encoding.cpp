@@ -185,7 +185,7 @@ Node* build_huffman_tree(unordered_map<char, int>& freq_map, bool debug = false)
     @param unordered_map<char, int>& freq_map : Reference to the frequency map
     @return void
 */
-void count_frequency(string text, unordered_map<char, int>& freq_map)  //Note : & is used to pass the address of the map to the function.
+void count_frequency(string& text, unordered_map<char, int>& freq_map)  //Note : & is used to pass the address of the map to the function.
 {
     for (char c : text) {
         freq_map[c]++;
@@ -219,7 +219,7 @@ void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huf
     @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
     @return string : The encoded text
 */
-string get_encoded_text(string text, unordered_map<char, string>& huffmanCode, bool debug = false)
+string get_encoded_text(string& text, unordered_map<char, string>& huffmanCode, bool debug = false)
 {
     string encoded_text = "";
     for (char c : text) {
@@ -236,7 +236,7 @@ string get_encoded_text(string text, unordered_map<char, string>& huffmanCode, b
     @param string& decoded_text : Reference to the decoded text
     @return void
 */
-void get_decode_text(Node* root, int &index, string str, string& decoded_text, bool debug = false)
+void get_decode_text(Node* root, int &index, string& encoded_text, string& decoded_text, bool debug = false)
 {
 	if (root == nullptr) {
 		return;
@@ -251,10 +251,10 @@ void get_decode_text(Node* root, int &index, string str, string& decoded_text, b
 
 	index++;
 
-	if (str[index] =='0')
-		get_decode_text(root->left, index, str, decoded_text, debug);
+	if (encoded_text[index] =='0')
+		get_decode_text(root->left, index, encoded_text, decoded_text, debug);
 	else
-		get_decode_text(root->right, index, str, decoded_text, debug);
+		get_decode_text(root->right, index, encoded_text, decoded_text, debug);
 }
 
 /*
@@ -309,7 +309,7 @@ int main()
 	// decode the encoded string
 	int index = -1;
 	string decoded_text = "";
-	while (index < (int)encoded_text.size() - 2) {
+	while ((index + 1) < (int)encoded_text.size()) {
 		get_decode_text(root, index, encoded_text, decoded_text, debug);
 	}
 	std::cout << "Decoded Text : " << decoded_text << std::endl;
