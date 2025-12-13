@@ -3,6 +3,9 @@ Playing around with the most common lossless compression algorithms. Was interes
 
 Rough test results and insights mentioned below. Structured results present in our blog.
 
+## Huffman Encoding
+<img width="1151" height="382" alt="image" src="https://github.com/user-attachments/assets/a45305b8-415f-438c-8c23-7164574a5032" />
+
 
 ## Brotli Grid search on tunable parameters for Form Model JSON : 
 
@@ -320,6 +323,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
