@@ -21,13 +21,6 @@
 
 using namespace std; // Use std namespace to avoid writing std:: prefix
 
-// Global Variables
-unordered_map<char, int> freq_map; // Hash Table to store the frequency of each character
-// traverse the Huffman Tree and store Huffman Codes
-// in a map.
-unordered_map<char, string> huffmanCode;
-bool debug = false; // Flag to enable debug mode - Print debug logs if true.
-
 // Quick Notes : 
 // int* p -> p is a pointer to an integer
 // p = &x -> p stores the address of x
@@ -140,7 +133,7 @@ void print_frequency_map(unordered_map<char, int>& freq_map)
         c. Push the new node back into the heap.
     3. The root of the Huffman Tree is the only node left in the heap.
 */
-Node* build_huffman_tree(unordered_map<char, int>& freq_map) 
+Node* build_huffman_tree(unordered_map<char, int>& freq_map, bool debug = false) 
 {
     // Create a new Min Heap object.
     MinHeap* min_heap = new MinHeap();
@@ -151,10 +144,10 @@ Node* build_huffman_tree(unordered_map<char, int>& freq_map)
         // pair.first -> character
 		// pair.second -> frequency
 		// nullptr -> left and right child are nullptr as we are creating leaf nodes.
-    min_heap->pq.push(new Node( pair.first, // character, 
-                                pair.second, // frequency, 
-                                nullptr, // left child, 
-                                nullptr)); // right child, 
+        min_heap->pq.push(new Node( pair.first, // character, 
+                                    pair.second, // frequency, 
+                                    nullptr, // left child, 
+                                    nullptr)); // right child, 
 	}
     
     // If Debug mode is enabled, print the heap contents.
@@ -169,10 +162,9 @@ Node* build_huffman_tree(unordered_map<char, int>& freq_map)
         min_heap->pq.pop();
         Node* right = min_heap->pq.top();
         min_heap->pq.pop();
-        // Create a new node with the sum of the frequencies of the two nodes.
-        Node* new_node = new Node('~', left->freq + right->freq, left, right);
+
         // Push the new node back into the heap.
-        min_heap->pq.push(new_node);
+        min_heap->pq.push(new Node('~', left->freq + right->freq, left, right));
     }
     
     if (debug) std::cout << "--------------------------------Huffman Tree Start--------------------------------" << std::endl;
@@ -180,7 +172,11 @@ Node* build_huffman_tree(unordered_map<char, int>& freq_map)
     if (debug) std::cout << "--------------------------------Huffman Tree End--------------------------------" << std::endl;
     
     // The root of the Huffman Tree is the only node left in the heap.
-    return min_heap->pq.top();
+    Node* root = min_heap->pq.top();
+    // Clear the memory allocated in the Min Heap.
+    // Cpp does not have a garbage collector like Java. Makes memory management more deterministic. delete is used to free the memory allocated to the objects.
+    delete min_heap;
+    return root;
 }
 
 /** 
@@ -203,7 +199,7 @@ void count_frequency(string text, unordered_map<char, int>& freq_map)  //Note : 
     @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
     @return void
 */
-void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huffmanCode)
+void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huffmanCode, bool debug = false)
 {
     if (root != nullptr) {
         if (root->left == nullptr && root->right == nullptr) {
@@ -211,8 +207,8 @@ void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huf
             std::cout << root->data << " : " << code << std::endl;
         }
         else {
-            get_huffman_codes(root->left, code + "0", huffmanCode);
-            get_huffman_codes(root->right, code + "1", huffmanCode);
+            get_huffman_codes(root->left, code + "0", huffmanCode, debug);
+            get_huffman_codes(root->right, code + "1", huffmanCode, debug);
         }
     }
 }
@@ -223,7 +219,7 @@ void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huf
     @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
     @return string : The encoded text
 */
-string get_encoded_text(string text, unordered_map<char, string>& huffmanCode)
+string get_encoded_text(string text, unordered_map<char, string>& huffmanCode, bool debug = false)
 {
     string encoded_text = "";
     for (char c : text) {
@@ -240,7 +236,7 @@ string get_encoded_text(string text, unordered_map<char, string>& huffmanCode)
     @param string& decoded_text : Reference to the decoded text
     @return void
 */
-void decode(Node* root, int &index, string str, string& decoded_text)
+void get_decode_text(Node* root, int &index, string str, string& decoded_text, bool debug = false)
 {
 	if (root == nullptr) {
 		return;
@@ -256,9 +252,24 @@ void decode(Node* root, int &index, string str, string& decoded_text)
 	index++;
 
 	if (str[index] =='0')
-		decode(root->left, index, str, decoded_text);
+		get_decode_text(root->left, index, str, decoded_text, debug);
 	else
-		decode(root->right, index, str, decoded_text);
+		get_decode_text(root->right, index, str, decoded_text, debug);
+}
+
+/*
+    Function to free the memory allocated recursively to the Huffman Tree.
+    @param Node* root : Pointer to the Root of the Huffman Tree
+    @return void
+*/
+void free_huffman_tree(Node* root) 
+{
+    if (root != nullptr) 
+    {
+        free_huffman_tree(root->left);
+        free_huffman_tree(root->right);
+        delete root;
+    }
 }
 
 /** 
@@ -266,7 +277,13 @@ void decode(Node* root, int &index, string str, string& decoded_text)
     @return int : The exit status
 */
 int main()
-{
+{   
+    // Variables
+    unordered_map<char, int> freq_map; // Hash Table to store the frequency of each character
+    unordered_map<char, string> huffmanCode;
+    bool debug = false; // Flag to enable debug mode - Print debug logs if true.
+    
+    
     // Input text
     string text = "Huffman";
 
@@ -275,14 +292,14 @@ int main()
     if (debug) print_frequency_map(freq_map); // Print the frequency map if debug mode is enabled.
 
     // Build the Huffman Tree
-    Node* root = build_huffman_tree(freq_map);
+    Node* root = build_huffman_tree(freq_map, debug);
 
     // Get the Huffman Codes for each character
     std::cout << "--------------------------------Huffman Codes--------------------------------" << std::endl;
-    get_huffman_codes(root, "", huffmanCode);
+    get_huffman_codes(root, "", huffmanCode, debug);
 
     // Get Encoded Text
-    string encoded_text = get_encoded_text(text, huffmanCode);
+    string encoded_text = get_encoded_text(text, huffmanCode, debug);
     std::cout << "Encoded Text : " << encoded_text << std::endl;
 
     // Decode the Encoded Text
@@ -291,10 +308,13 @@ int main()
 	int index = -1;
 	string decoded_text = "";
 	while (index < (int)encoded_text.size() - 2) {
-		decode(root, index, encoded_text, decoded_text);
+		get_decode_text(root, index, encoded_text, decoded_text, debug);
 	}
 	std::cout << "Decoded Text : " << decoded_text << std::endl;
+
+    // Free the memory allocated to the Huffman Tree.
+    free_huffman_tree(root);
 }
 
-// Execute on MacOS - clang++ huffman_encoding.cpp -o huffman_encoding
+// Execute on MacOS - clang++ huffman_encoding.cpp -o huffman_encoding && ./huffman_encoding
 // clang++ is the compiler for C++ made by LLVM and -o is used to specify the output file name.
