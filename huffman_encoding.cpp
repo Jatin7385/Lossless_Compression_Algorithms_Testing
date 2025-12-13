@@ -1,17 +1,17 @@
 /*
-Implementing Huffman Encoding in C++ for fun.
+    Implementing Huffman Encoding in C++ for fun.
 
-Fundamental Idea behind Huffman Encoding is to assign prefix-free shorter codes to more frequent characters.
-Prefix-free means that no code is a prefix of any other code.
+    Fundamental Idea behind Huffman Encoding is to assign prefix-free shorter codes to more frequent characters.
+    Prefix-free means that no code is a prefix of any other code.
 
-This is also a refresher for me on C++. So, don't mind the very basic comments.
+    This is also a refresher for me on C++. So, don't mind the very basic comments.
 
-Steps : 
-1. Count the frequency of each character in the input text.
-2. Build a Huffman Tree(Min Heap) from the frequency of the characters.
-3. Assign codes to the characters in the Huffman Tree. Assign 0 to the left child and 1 to the right child.
-4. Encode the input text using the Huffman Tree.
-5. Decode the encoded text using the Huffman Tree.
+    Steps : 
+    1. Count the frequency of each character in the input text.
+    2. Build a Huffman Tree(Min Heap) from the frequency of the characters.
+    3. Assign codes to the characters in the Huffman Tree. Assign 0 to the left child and 1 to the right child.
+    4. Encode the input text using the Huffman Tree.
+    5. Decode the encoded text using the Huffman Tree.
 */
 
 #include <iostream> // Provides input and output stream functionality (std:cout, std:cin)
@@ -74,7 +74,11 @@ struct MinHeap {
     // pq.empty() -> returns true if the priority queue is empty, false otherwise.
 };
 
-// Function to print the heap contents one after the other.
+/** 
+    Function to print the heap contents one after the other. 
+    @param MinHeap* min_heap : Pointer to the Min Heap
+    @return void
+*/
 void print_heap(MinHeap* min_heap)
 {   
     std::cout << "--------------------------------Heap Contents--------------------------------" << std::endl;
@@ -88,6 +92,11 @@ void print_heap(MinHeap* min_heap)
     }
 }
 
+/** 
+    Function to print the Huffman Tree.
+    @param Node* root : Pointer to the Root of the Huffman Tree
+    @return void
+*/
 void print_huffman_tree(Node* root)
 {
     if (root != nullptr) {
@@ -101,6 +110,11 @@ void print_huffman_tree(Node* root)
     }
 }
 
+/** 
+    Function to print the frequency map.
+    @param unordered_map<char, int>& freq_map : Reference to the frequency map
+    @return void
+*/
 void print_frequency_map(unordered_map<char, int>& freq_map)
 {   
     // std::cout is used to print to the console.
@@ -114,15 +128,17 @@ void print_frequency_map(unordered_map<char, int>& freq_map)
 }
 
 /*
-Function to build the Huffman Tree using the frequency map.
+    Function to build the Huffman Tree using the frequency map.
+    @param unordered_map<char, int>& freq_map : Reference to the frequency map
+    @return Node* : Pointer to the Root of the Huffman Tree
 
-Steps : 
-1. Create a min heap of nodes from the frequency map.
-2. While the heap has more than one node, do the following :
-    a. Pop the two nodes with the lowest frequency from the heap.
-    b. Create a new node with the sum of the frequencies of the two nodes.
-    c. Push the new node back into the heap.
-3. The root of the Huffman Tree is the only node left in the heap.
+    Steps : 
+    1. Create a min heap of nodes from the frequency map.
+    2. While the heap has more than one node, do the following :
+        a. Pop the two nodes with the lowest frequency from the heap.
+        b. Create a new node with the sum of the frequencies of the two nodes.
+        c. Push the new node back into the heap.
+    3. The root of the Huffman Tree is the only node left in the heap.
 */
 Node* build_huffman_tree(unordered_map<char, int>& freq_map) 
 {
@@ -167,7 +183,12 @@ Node* build_huffman_tree(unordered_map<char, int>& freq_map)
     return min_heap->pq.top();
 }
 
-// Function to count the frequency of each character in a string.
+/** 
+    Function to count the frequency of each character in a string.
+    @param string text : The input text
+    @param unordered_map<char, int>& freq_map : Reference to the frequency map
+    @return void
+*/
 void count_frequency(string text, unordered_map<char, int>& freq_map)  //Note : & is used to pass the address of the map to the function.
 {
     for (char c : text) {
@@ -175,6 +196,13 @@ void count_frequency(string text, unordered_map<char, int>& freq_map)  //Note : 
     }
 }
 
+/** 
+    Function to get the Huffman Codes for each character.
+    @param Node* root : Pointer to the Root of the Huffman Tree
+    @param string code : The code for the current character
+    @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
+    @return void
+*/
 void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huffmanCode)
 {
     if (root != nullptr) {
@@ -189,6 +217,12 @@ void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huf
     }
 }
 
+/** 
+    Function to get the encoded text.
+    @param string text : The input text
+    @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
+    @return string : The encoded text
+*/
 string get_encoded_text(string text, unordered_map<char, string>& huffmanCode)
 {
     string encoded_text = "";
@@ -198,7 +232,14 @@ string get_encoded_text(string text, unordered_map<char, string>& huffmanCode)
     return encoded_text;
 }
 
-// traverse the Huffman Tree and decode the encoded string
+/** 
+    Function to decode the encoded text.
+    @param Node* root : Pointer to the Root of the Huffman Tree
+    @param int &index : Reference to the index of the current character
+    @param string str : The encoded text
+    @param string& decoded_text : Reference to the decoded text
+    @return void
+*/
 void decode(Node* root, int &index, string str, string& decoded_text)
 {
 	if (root == nullptr) {
@@ -220,7 +261,10 @@ void decode(Node* root, int &index, string str, string& decoded_text)
 		decode(root->right, index, str, decoded_text);
 }
 
-// Main function
+/** 
+    Function to main function.
+    @return int : The exit status
+*/
 int main()
 {
     // Input text
