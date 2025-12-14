@@ -13,6 +13,9 @@ Rough test results and insights mentioned below. Structured results present in o
 ### No Expansion of compressed data size
 <img width="1700" height="241" alt="image" src="https://github.com/user-attachments/assets/318c911f-bfa6-40f6-8270-7a340a79017e" />
 
+## DEFLATE
+<img width="1238" height="106" alt="image" src="https://github.com/user-attachments/assets/d7343bda-ebd7-4b05-a60d-4f15b29e64af" />
+- I see an expansion with the Huffman after LZ77 Compression here. From preliminary read ups, I see, one would need to use Bitwriter for this.
 
 ## Brotli Grid search on tunable parameters for Form Model JSON : 
 
@@ -330,6 +333,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
