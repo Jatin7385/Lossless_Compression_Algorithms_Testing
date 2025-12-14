@@ -43,10 +43,17 @@ Token* lz77_compress(std::string input, bool debug = false);
 std::string lz77_decompress(Token* compressed);
 
 /*
-    Function to return string from Token array
+    Function to return serialized string from Token array
     @param Token* compressed : Pointer for Compressed Token Array.
     @return string - compressed string
 */
-std::string get_string_from_token_arr(Token* data);
+std::string get_serialized_string_from_token_arr(Token* data);
+
+/*
+      Function to return string from Token array
+    @param Token* compressed : Pointer for Compressed Token Array.
+    @return string - compressed string
+*/
+std::string get_string_from_token_arr(Token* compressed_data);
 
 #endif

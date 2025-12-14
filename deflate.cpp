@@ -39,6 +39,7 @@ int main()
 
     // LZ77 Compression
     Token* compressed_data = lz77_compress(input);
+    // string lz77_compressed_string = get_serialized_string_from_token_arr(compressed_data);
     string lz77_compressed_string = get_string_from_token_arr(compressed_data);
 
     cout << "LZ77 Compressed Data :: " << lz77_compressed_string << " :: Size :: " << lz77_compressed_string.length() << endl;

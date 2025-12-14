@@ -92,6 +92,24 @@ Token* lz77_compress(string input, bool debug)
     return output;
 }
 
+string get_serialized_string_from_token_arr(Token* compressed_data)
+{
+    string binary = "";
+    for (int i = 0; i < counter; i++) {
+        // store offset and length as 2 bytes each
+        binary += (char)((compressed_data[i].offset >> 8) & 0xFF);
+        binary += (char)(compressed_data[i].offset & 0xFF);
+
+        binary += (char)((compressed_data[i].length_of_match >> 8) & 0xFF);
+        binary += (char)(compressed_data[i].length_of_match & 0xFF);
+
+        // store next_char
+        binary += compressed_data[i].next_char;
+    }
+    cout << "LZ77 Serialized String :: " << binary << endl;
+    return binary;
+}
+
 string get_string_from_token_arr(Token* compressed_data)
 {
     string lz77_compressed_string = "";
