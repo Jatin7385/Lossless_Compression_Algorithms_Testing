@@ -22,6 +22,8 @@
 
 using namespace std; // Use std namespace to avoid writing std:: prefix
 
+Node* root;
+
 // Quick Notes : 
 // int* p -> p is a pointer to an integer
 // p = &x -> p stores the address of x
@@ -165,7 +167,7 @@ void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huf
     if (root != nullptr) {
         if (root->left == nullptr && root->right == nullptr) {
             huffmanCode[root->data] = code;
-            std::cout << root->data << " : " << code << std::endl;
+            if (debug) std::cout << root->data << " : " << code << std::endl;
         }
         else {
             get_huffman_codes(root->left, code + "0", huffmanCode, debug);
@@ -233,51 +235,98 @@ void free_huffman_tree(Node* root)
     }
 }
 
-/** 
-    Function to main function.
-    @return int : The exit status
-*/
-int main()
-{   
+string huffman_encoding_compress(string& input, bool debug)
+{
     // Variables
     unordered_map<char, int> freq_map; // Hash Table to store the frequency of each character
     unordered_map<char, string> huffmanCode;
-    bool debug = false; // Flag to enable debug mode - Print debug logs if true.
-    
-    
-    // Input text
-    string text = "Huffman Encoding is a lossless compression algorithm.";
 
-    cout << "Original Text : " << text << endl;
+    if (debug) cout << "Original Text : " << input << endl;
 
     // Count the frequency of each character in the input text
-    count_frequency(text, freq_map);
+    count_frequency(input, freq_map);
     if (debug) print_frequency_map(freq_map); // Print the frequency map if debug mode is enabled.
 
     // Build the Huffman Tree
-    Node* root = build_huffman_tree(freq_map, debug);
+    root = build_huffman_tree(freq_map, debug);
 
     // Get the Huffman Codes for each character
-    std::cout << "--------------------------------Huffman Codes--------------------------------" << std::endl;
+    if (debug) std::cout << "--------------------------------Huffman Codes--------------------------------" << std::endl;
     get_huffman_codes(root, "", huffmanCode, debug);
 
     // Get Encoded Text
-    string encoded_text = get_encoded_text(text, huffmanCode, debug);
-    std::cout << "Encoded Text : " << encoded_text << std::endl;
+    string encoded_text = get_encoded_text(input, huffmanCode, debug);
+    if (debug) std::cout << "Encoded Text : " << encoded_text << std::endl;
 
+    return encoded_text;
+}
+
+
+
+string huffman_encoding_decompress(string& compressed_input, bool debug)
+{
     // Decode the Encoded Text
     // traverse the Huffman Tree again and this time
 	// decode the encoded string
 	int index = -1;
 	string decoded_text = "";
-	while ((index + 1) < (int)encoded_text.size()) {
-		get_decode_text(root, index, encoded_text, decoded_text, debug);
+	while ((index + 1) < (int)compressed_input.size()) {
+		get_decode_text(root, index, compressed_input, decoded_text, debug);
 	}
-	std::cout << "Decoded Text : " << decoded_text << std::endl;
+	if (debug) std::cout << "Decoded Text : " << decoded_text << std::endl;
 
     // Free the memory allocated to the Huffman Tree.
     free_huffman_tree(root);
+
+    return decoded_text;
 }
+
+
+// /** 
+//     Function to main function.
+//     @return int : The exit status
+// */
+// int main()
+// {   
+//     // Variables
+//     unordered_map<char, int> freq_map; // Hash Table to store the frequency of each character
+//     unordered_map<char, string> huffmanCode;
+//     bool debug = false; // Flag to enable debug mode - Print debug logs if true.
+    
+    
+//     // Input text
+//     string text = "Huffman Encoding is a lossless compression algorithm.";
+
+//     cout << "Original Text : " << text << endl;
+
+//     // Count the frequency of each character in the input text
+//     count_frequency(text, freq_map);
+//     if (debug) print_frequency_map(freq_map); // Print the frequency map if debug mode is enabled.
+
+//     // Build the Huffman Tree
+//     Node* root = build_huffman_tree(freq_map, debug);
+
+//     // Get the Huffman Codes for each character
+//     std::cout << "--------------------------------Huffman Codes--------------------------------" << std::endl;
+//     get_huffman_codes(root, "", huffmanCode, debug);
+
+//     // Get Encoded Text
+//     string encoded_text = get_encoded_text(text, huffmanCode, debug);
+//     std::cout << "Encoded Text : " << encoded_text << std::endl;
+
+//     // Decode the Encoded Text
+//     // traverse the Huffman Tree again and this time
+// 	// decode the encoded string
+// 	int index = -1;
+// 	string decoded_text = "";
+// 	while ((index + 1) < (int)encoded_text.size()) {
+// 		get_decode_text(root, index, encoded_text, decoded_text, debug);
+// 	}
+// 	std::cout << "Decoded Text : " << decoded_text << std::endl;
+
+//     // Free the memory allocated to the Huffman Tree.
+//     free_huffman_tree(root);
+// }
 
 // Execute on MacOS - clang++ huffman_encoding.cpp -o huffman_encoding && ./huffman_encoding
 // clang++ is the compiler for C++ made by LLVM and -o is used to specify the output file name.

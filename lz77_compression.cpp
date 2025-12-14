@@ -15,7 +15,7 @@ int counter = 0; // Counter to input data into the Tokens Array
   @param input - string input
   @return Token* - Pointer of the first token of the Token array.
 */
-Token* compress(string input)
+Token* lz77_compress(string input, bool debug)
 {
     int input_length = input.length();
     /* Token Array in the worst case can be the length of input 
@@ -80,7 +80,7 @@ Token* compress(string input)
             }
         }
         token.next_char = (index + token.length_of_match) < input.length() ? input[index + token.length_of_match] : '\0';
-        cout << "Index : " << index << " :: Current Char : " << input[index] << " :: search_buffer : " << search_buffer << " :: Offset : " << token.offset << " :: Length : " << token.length_of_match << " :: Next Char : " << token.next_char << " :: Matched String : " << input.substr(index, token.length_of_match) << " :: " << input.substr(index, token.length_of_match).length() << endl;
+        if(debug) cout << "Index : " << index << " :: Current Char : " << input[index] << " :: search_buffer : " << search_buffer << " :: Offset : " << token.offset << " :: Length : " << token.length_of_match << " :: Next Char : " << token.next_char << " :: Matched String : " << input.substr(index, token.length_of_match) << " :: " << input.substr(index, token.length_of_match).length() << endl;
 
         // Appending it to the Tokens array
         output[counter] = token;
@@ -92,12 +92,25 @@ Token* compress(string input)
     return output;
 }
 
+string get_string_from_token_arr(Token* compressed_data)
+{
+    string lz77_compressed_string = "";
+    int compressed_length = 0;
+    for (int i = 0; i < counter; i++)
+    {
+        lz77_compressed_string += compressed_data[i].next_char;
+        cout << compressed_data[i].next_char;
+        compressed_length++;
+    }
+    return lz77_compressed_string;
+}
+
 /*
     Function to decompress data using LZ77 Decompression Algorithm.
     @param Token* compressed : Pointer for Compressed Token Array.
     @return string - decompressed data
 */
-string decompress(Token* compressed)
+string lz77_decompress(Token* compressed)
 {
     string decompressed_text = "";
     int pos = 0;
@@ -125,28 +138,28 @@ string decompress(Token* compressed)
     return decompressed_text;
 }
 
-int main()
-{
-    // string text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-    string text = "The computerphile channel handles computer topics.";
-    cout << "Sizeof Char :: " << sizeof(char) << " :: Sizeof Int :: " << sizeof(uint8_t) << endl;
-    cout << "Original Text to be compressed :: " << text << " :: Size :: " << (sizeof(char) * text.length()) << endl;
-    Token* compressed_data = compress(text);
+// int main()
+// {
+//     // string text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+//     string text = "The computerphile channel handles computer topics.";
+//     cout << "Sizeof Char :: " << sizeof(char) << " :: Sizeof Int :: " << sizeof(uint8_t) << endl;
+//     cout << "Original Text to be compressed :: " << text << " :: Size :: " << (sizeof(char) * text.length()) << endl;
+//     Token* compressed_data = lz77_compress(text);
 
-    cout << "Compressed Data :: ";
-    int compressed_length = 0;
-    for (int i = 0; i < counter; i++)
-    {
-        cout << compressed_data[i].next_char;
-        compressed_length++;
-    }
+//     cout << "Compressed Data :: ";
+//     int compressed_length = 0;
+//     for (int i = 0; i < counter; i++)
+//     {
+//         cout << compressed_data[i].next_char;
+//         compressed_length++;
+//     }
 
-    cout << " :: Size : " << (counter * (sizeof(uint8_t) * 2 + sizeof(char))) << endl;
+//     cout << " :: Size : " << (counter * (sizeof(uint8_t) * 2 + sizeof(char))) << endl;
 
-    string decompressed_data = decompress(compressed_data);
-    cout << "Decompressed Data :: " << decompressed_data << " :: Size : " << (sizeof(char) * decompressed_data.length()) << endl;
+//     string decompressed_data = lz77_decompress(compressed_data);
+//     cout << "Decompressed Data :: " << decompressed_data << " :: Size : " << (sizeof(char) * decompressed_data.length()) << endl;
 
-    // Memory leaks prevention
-    delete[] compressed_data;
-    return 0;
-}
+//     // Memory leaks prevention
+//     delete[] compressed_data;
+//     return 0;
+// }

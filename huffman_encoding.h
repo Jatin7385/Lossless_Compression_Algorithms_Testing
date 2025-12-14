@@ -118,6 +118,22 @@ std::string get_encoded_text(std::string& text, std::unordered_map<char,std::str
 void get_decode_text(Node* root, int &index,std::string& encoded_text,std::string& decoded_text, bool debug = false);
 
 /*
+    All encompassing function to take in the input and return compressed output.
+    @param string input
+    @param bool debug
+    @returns string compressed output
+*/
+std::string huffman_encoding_compress(std::string& input, bool debug = false);
+
+/*
+    All encompassing function to take in the compressed input and return decompressed output.
+    @param string compressed_input
+    @param bool debug
+    @returns string decompressed output
+*/
+std::string huffman_encoding_decompress(std::string& compressed_input, bool debug = false);
+
+/*
     Function to free the memory allocated recursively to the Huffman Tree.
     @param Node* root : Pointer to the Root of the Huffman Tree
     @return void

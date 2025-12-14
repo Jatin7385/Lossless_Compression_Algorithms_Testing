@@ -33,13 +33,20 @@ struct Token
   @param input - string input
   @return Token* - Pointer of the first token of the Token array.
 */
-Token* compress(std::string input);
+Token* lz77_compress(std::string input, bool debug = false);
 
 /*
     Function to decompress data using LZ77 Decompression Algorithm.
     @param Token* compressed : Pointer for Compressed Token Array.
     @return string - decompressed data
 */
-std::string decompress(Token* compressed);
+std::string lz77_decompress(Token* compressed);
+
+/*
+    Function to return string from Token array
+    @param Token* compressed : Pointer for Compressed Token Array.
+    @return string - compressed string
+*/
+std::string get_string_from_token_arr(Token* data);
 
 #endif
