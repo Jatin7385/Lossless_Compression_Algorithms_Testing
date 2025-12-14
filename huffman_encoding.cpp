@@ -188,6 +188,7 @@ string get_encoded_text(string& text, unordered_map<char, string>& huffmanCode, 
     for (char c : text) {
         encoded_text += huffmanCode[c];
     }
+    cout << "Non Bit Packed Size :: " << encoded_text.size() << endl;
     return encoded_text;
 }
 
@@ -196,6 +197,9 @@ string get_encoded_text(string& text, unordered_map<char, string>& huffmanCode, 
     @param string text : The input text
     @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
     @return string : The encoded text
+
+    Quick Note :: A string has characters with each char(1 or 0) holding 1 Byte/8 bits. Bit packing helps pack these into actual bits.
+    This compresses the size.
 */
 string get_encoded_bitpacked_text(string& text, unordered_map<char, string>& huffmanCode, bool debug)
 {
@@ -214,6 +218,8 @@ string get_encoded_bitpacked_text(string& text, unordered_map<char, string>& huf
             bit_pos++;
         }
     }
+
+    cout << "Bit Packed Size :: " << packed.size() << endl;
     return packed;
 }
 
