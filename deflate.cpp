@@ -35,7 +35,7 @@ int main()
     // cout << "Original Text :: " << input << " :: Original Size :: " << input.length() << endl;
     
     // Direct Huffman Encoding -- Just for testing
-    string d_huffman_compressed = huffman_encoding_compress(input, false);
+    string d_huffman_compressed = huffman_encoding_compress(input, true, false);
 
     // LZ77 Compression
     Token* compressed_data = lz77_compress(input);
@@ -45,7 +45,7 @@ int main()
     // cout << "LZ77 Compressed Data :: " << lz77_compressed_string << " :: Size :: " << lz77_compressed_string.length() << endl;
     
     // Huffman Encoding
-    string huffman_compressed = huffman_encoding_compress(lz77_compressed_string, false);
+    string huffman_compressed = huffman_encoding_compress(lz77_compressed_string, true, false);
 
     // cout << "Direct Huffman Compressed :: " << d_huffman_compressed << " :: Size :: " << d_huffman_compressed.length() << endl;
     // cout << "Deflate Output :: " << huffman_compressed << " :: Size :: " << huffman_compressed.length() << endl;

@@ -108,6 +108,14 @@ void get_huffman_codes(Node* root, std::string code, std::unordered_map<char,std
 std::string get_encoded_text(std::string& text, std::unordered_map<char,std::string>& huffmanCode, bool debug = false);
 
 /** 
+    Function to get Bit Packed encoded text.
+    @param string text : The input text
+    @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
+    @return string : The encoded text
+*/
+std::string get_encoded_bitpacked_text(std::string& text, std::unordered_map<char, std::string>& huffmanCode);
+
+/** 
     Function to decode the encoded text.
     @param Node* root : Pointer to the Root of the Huffman Tree
     @param int &index : Reference to the index of the current character
@@ -123,7 +131,7 @@ void get_decode_text(Node* root, int &index,std::string& encoded_text,std::strin
     @param bool debug
     @returns string compressed output
 */
-std::string huffman_encoding_compress(std::string& input, bool debug = false);
+std::string huffman_encoding_compress(std::string& input, bool bit_packed = false, bool debug = false);
 
 /*
     All encompassing function to take in the compressed input and return decompressed output.

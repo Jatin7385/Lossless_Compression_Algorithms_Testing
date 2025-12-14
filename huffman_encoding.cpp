@@ -177,7 +177,7 @@ void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huf
 }
 
 /** 
-    Function to get the encoded text.
+    Function to get the encoded text[Not Bit Packed].
     @param string text : The input text
     @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
     @return string : The encoded text
@@ -189,6 +189,32 @@ string get_encoded_text(string& text, unordered_map<char, string>& huffmanCode, 
         encoded_text += huffmanCode[c];
     }
     return encoded_text;
+}
+
+/** 
+    Function to get Bit Packed encoded text.
+    @param string text : The input text
+    @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
+    @return string : The encoded text
+*/
+string get_encoded_bitpacked_text(string& text, unordered_map<char, string>& huffmanCode, bool debug)
+{
+    size_t total_bits = 0;
+    for (char c : text) total_bits += huffmanCode[c].size();
+    
+    string packed((total_bits + 7) / 8, 0);  // Byte array
+    size_t bit_pos = 0;
+    
+    for (char c : text) {
+        for (char bit_char : huffmanCode[c]) {
+            size_t byte_idx = bit_pos / 8;
+            size_t bit_idx = 7 - (bit_pos % 8);  // MSB first
+            if (bit_char == '1') 
+                packed[byte_idx] |= (1 << bit_idx);
+            bit_pos++;
+        }
+    }
+    return packed;
 }
 
 /** 
@@ -235,7 +261,7 @@ void free_huffman_tree(Node* root)
     }
 }
 
-string huffman_encoding_compress(string& input, bool debug)
+string huffman_encoding_compress(string& input, bool bit_packed, bool debug)
 {
     // Variables
     unordered_map<char, int> freq_map; // Hash Table to store the frequency of each character
@@ -255,7 +281,7 @@ string huffman_encoding_compress(string& input, bool debug)
     get_huffman_codes(root, "", huffmanCode, debug);
 
     // Get Encoded Text
-    string encoded_text = get_encoded_text(input, huffmanCode, debug);
+    string encoded_text = bit_packed ? get_encoded_bitpacked_text(input, huffmanCode, debug) : get_encoded_text(input, huffmanCode, debug);
     if (debug) std::cout << "Encoded Text : " << encoded_text << std::endl;
 
     return encoded_text;
