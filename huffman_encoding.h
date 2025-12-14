@@ -6,6 +6,26 @@
 #include <queue> // Provides priority_queue functionality
 #include <vector>
 
+struct BitReader {
+    const std::string& data;
+    size_t bit_pos = 0;
+    size_t total_bits;
+
+    BitReader(const std::string& d, size_t bits)
+        : data(d), total_bits(bits) {}
+
+    bool has_bits() const {
+        return bit_pos < total_bits;
+    }
+
+    int read_bit() {
+        size_t byte_idx = bit_pos / 8;
+        size_t bit_idx  = 7 - (bit_pos % 8);
+        bit_pos++;
+        return (data[byte_idx] >> bit_idx) & 1;
+    }
+};
+
 // Node structure for the Huffman Tree
 struct Node { // Structs and Classes are the same in C++. Default member access and Inheritance in Structs are public by default and private in classes by default.
     char data; // Character data
@@ -67,7 +87,7 @@ void print_huffman_tree(Node* root);
 */
 void print_frequency_map(std::unordered_map<char, int>& freq_map);
 
-/*
+/**
     Function to build the Huffman Tree using the frequency map.
     @param std::unordered_map<char, int>& freq_map : Reference to the frequency map
     @return Node* : Pointer to the Root of the Huffman Tree
@@ -125,7 +145,17 @@ std::string get_encoded_bitpacked_text(std::string& text, std::unordered_map<cha
 */
 void get_decode_text(Node* root, int &index,std::string& encoded_text,std::string& decoded_text, bool debug = false);
 
-/*
+/** 
+    Function to decode the bit packed encoded text.
+    @param Node* root : Pointer to the Root of the Huffman Tree
+    @param string &packed : Reference to the packed string.
+    @param size_t total_bits : Total Bits
+    @param bool debug : debug flag
+    @return std::string decoded_text
+*/
+std::string get_bit_packed_decoded_text(Node* root, const std::string& packed, size_t total_bits, bool debug = false);
+
+/**
     All encompassing function to take in the input and return compressed output.
     @param string input
     @param bool debug
@@ -133,15 +163,15 @@ void get_decode_text(Node* root, int &index,std::string& encoded_text,std::strin
 */
 std::string huffman_encoding_compress(std::string& input, bool bit_packed = false, bool debug = false);
 
-/*
+/**
     All encompassing function to take in the compressed input and return decompressed output.
     @param string compressed_input
     @param bool debug
     @returns string decompressed output
 */
-std::string huffman_encoding_decompress(std::string& compressed_input, bool debug = false);
+std::string huffman_encoding_decompress(std::string& compressed_input, bool bit_packed, int total_bits, bool debug = false);
 
-/*
+/**
     Function to free the memory allocated recursively to the Huffman Tree.
     @param Node* root : Pointer to the Root of the Huffman Tree
     @return void

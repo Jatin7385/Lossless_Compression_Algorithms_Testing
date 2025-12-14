@@ -29,8 +29,9 @@ string readFile(string fileName, bool debug = false)
 
 int main()
 {
-    // string input = "Deflate compression";
-    string input = readFile("./data.txt");
+    string input = "Deflate compression";
+    // string input = readFile("./data.txt");
+    // ----------------------------------- DEFLATE -------------------------------------------------
     unordered_map<char, int> freq_map; // Hash Table to store the frequency of each character
     // cout << "Original Text :: " << input << " :: Original Size :: " << input.length() << endl;
     
@@ -39,14 +40,15 @@ int main()
 
     // LZ77 Compression
     Token* compressed_data = lz77_compress(input);
-    // string lz77_compressed_string = get_serialized_string_from_token_arr(compressed_data);
-    string lz77_compressed_string = get_string_from_token_arr(compressed_data);
+    string lz77_compressed_string = get_serialized_string_from_token_arr(compressed_data);
+
+    // string lz77_compressed_string = get_string_from_token_arr(compressed_data);
 
     // cout << "LZ77 Compressed Data :: " << lz77_compressed_string << " :: Size :: " << lz77_compressed_string.length() << endl;
     
     // Huffman Encoding
     string huffman_compressed = huffman_encoding_compress(lz77_compressed_string, true, false);
-
+    int total_bits = lz77_compressed_string.size();
     // cout << "Direct Huffman Compressed :: " << d_huffman_compressed << " :: Size :: " << d_huffman_compressed.length() << endl;
     // cout << "Deflate Output :: " << huffman_compressed << " :: Size :: " << huffman_compressed.length() << endl;
     
@@ -56,6 +58,20 @@ int main()
     cout << "CR : Direct Huffman :: " << (float)(input.size() / (1.0 * d_huffman_compressed.size())) << endl;
     cout << "CR : LZ77 :: " << (float)(input.size() / (1.0 * lz77_compressed_string.size())) << endl;
     cout << "CR : Deflate :: " << (float)(input.size() / (1.0 * huffman_compressed.size())) << endl;
+
+    // --------------------------------------- INFLATE -------------------------------------------------
+    string huffman_decoded = huffman_encoding_decompress(huffman_compressed, true, total_bits, false);
+    int tokens_count = 0;
+
+    cout << "LZ77 Deserialized String :: " << huffman_decoded << " :: Size :: " << huffman_decoded.size() << endl;
+
+    Token* recovered_tokens_arr = unserialize_tokens(huffman_decoded, tokens_count);
+    string decompressed = lz77_decompress(recovered_tokens_arr);
+
+    cout << "Decompression verified :: " << (input == decompressed) << endl;
+
+    delete[] recovered_tokens_arr;
+    delete[] compressed_data;
 
     return 0;
 }

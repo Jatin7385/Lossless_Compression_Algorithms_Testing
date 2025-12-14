@@ -92,6 +92,39 @@ Token* lz77_compress(string input, bool debug)
     return output;
 }
 
+// Unserialize and return Token Array
+Token* unserialize_tokens(const string& binary, int& out_token_count)
+{
+    const int BYTES_PER_TOKEN = 5;
+
+    if (binary.size() % BYTES_PER_TOKEN != 0) {
+        cerr << "Corrupt LZ77 stream\n";
+        return nullptr;
+    }
+
+    out_token_count = binary.size() / BYTES_PER_TOKEN;
+    Token* tokens = new Token[out_token_count];
+
+    int idx = 0;
+    for (int i = 0; i < out_token_count; i++) {
+        uint8_t b0 = (uint8_t)binary[idx++];
+        uint8_t b1 = (uint8_t)binary[idx++];
+        uint8_t b2 = (uint8_t)binary[idx++];
+        uint8_t b3 = (uint8_t)binary[idx++];
+
+        tokens[i].offset =
+            (b0 << 8) | b1;
+
+        tokens[i].length_of_match =
+            (b2 << 8) | b3;
+
+        tokens[i].next_char = binary[idx++];
+    }
+
+    return tokens;
+}
+
+
 string get_serialized_string_from_token_arr(Token* compressed_data)
 {
     string binary = "";
@@ -106,7 +139,8 @@ string get_serialized_string_from_token_arr(Token* compressed_data)
         // store next_char
         binary += compressed_data[i].next_char;
     }
-    cout << "LZ77 Serialized String :: " << binary << endl;
+    cout << "LZ77 Serialized String :: " << binary << " :: Size :: " << binary.size() << endl;
+    cout << "Done :: " << endl;
     return binary;
 }
 

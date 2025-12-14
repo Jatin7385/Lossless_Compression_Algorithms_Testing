@@ -42,6 +42,8 @@ Token* lz77_compress(std::string input, bool debug = false);
 */
 std::string lz77_decompress(Token* compressed);
 
+Token* unserialize_tokens(const std::string& binary, int& out_token_count);
+
 /*
     Function to return serialized string from Token array
     @param Token* compressed : Pointer for Compressed Token Array.

@@ -252,6 +252,35 @@ void get_decode_text(Node* root, int &index, string& encoded_text, string& decod
 		get_decode_text(root->right, index, encoded_text, decoded_text, debug);
 }
 
+/** 
+    Function to decode the bit packed encoded text.
+    @param Node* root : Pointer to the Root of the Huffman Tree
+    @param string &packed : Reference to the packed string.
+    @param size_t total_bits : Total Bits
+    @param bool debug : debug flag
+    @return string decoded_text
+*/
+string get_bit_packed_decoded_text(Node* root, const string& packed, size_t total_bits, bool debug)
+{
+    cout << "bit_packed_decoded :: Total Bits :: " << total_bits << endl;
+    string decoded;
+    BitReader br(packed, total_bits);
+
+    while (br.has_bits()) {
+        Node* curr = root;
+
+        // Walk until leaf
+        while (curr->left || curr->right) {
+            int bit = br.read_bit();
+            curr = (bit == 0) ? curr->left : curr->right;
+        }
+
+        decoded += curr->data;
+    }
+
+    return decoded;
+}
+
 /*
     Function to free the memory allocated recursively to the Huffman Tree.
     @param Node* root : Pointer to the Root of the Huffman Tree
@@ -295,16 +324,24 @@ string huffman_encoding_compress(string& input, bool bit_packed, bool debug)
 
 
 
-string huffman_encoding_decompress(string& compressed_input, bool debug)
+string huffman_encoding_decompress(string& compressed_input, bool bit_packed_flag, int total_bits, bool debug)
 {
+
+    // cout << "Bit packed << " << bit_packed_flag :: endl;
     // Decode the Encoded Text
     // traverse the Huffman Tree again and this time
 	// decode the encoded string
-	int index = -1;
-	string decoded_text = "";
-	while ((index + 1) < (int)compressed_input.size()) {
-		get_decode_text(root, index, compressed_input, decoded_text, debug);
-	}
+    string decoded_text = "";
+    if (!bit_packed_flag)
+    {
+        int index = -1;
+        while ((index + 1) < (int)compressed_input.size()) {
+            get_decode_text(root, index, compressed_input, decoded_text, debug);
+        }
+    } else
+    {
+        decoded_text = get_bit_packed_decoded_text(root, compressed_input, total_bits, debug);
+    }
 	if (debug) std::cout << "Decoded Text : " << decoded_text << std::endl;
 
     // Free the memory allocated to the Huffman Tree.
