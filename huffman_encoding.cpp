@@ -18,6 +18,7 @@
 #include <string> // Provides string functionality
 #include <unordered_map> // Provides unordered_map(Hash Table) functionality
 #include <queue> // Provides priority_queue functionality
+# include "huffman_encoding.h"
 
 using namespace std; // Use std namespace to avoid writing std:: prefix
 
@@ -26,46 +27,6 @@ using namespace std; // Use std namespace to avoid writing std:: prefix
 // p = &x -> p stores the address of x
 // *p -> value at the address stored in p
 // int& r = x -> r is a reference to x.
-
-// Node structure for the Huffman Tree
-struct Node { // Structs and Classes are the same in C++. Default member access and Inheritance in Structs are public by default and private in classes by default.
-    char data; // Character data
-    int freq; // Frequency of the character
-    Node* left; // Left Child Pointer --> * is used to declare a pointer to a Node
-    Node* right; // Right Child Pointer
-
-    // Constructor to create a new node
-    Node(char c, int freq, Node* left = nullptr, Node* right = nullptr) {
-        this->data = c;
-        this->freq = freq;
-        this->left = left;
-        this->right = right;
-    }
-};
-
-// Min Heap structure to store the nodes of the Huffman Tree.
-struct MinHeap {
-    // Comparator function to compare the objects. (Used to convert the priority queue to a Min heap.)
-    struct compare {
-        bool operator()(Node* a, Node* b) {
-            return a->freq > b->freq; // min-heap based on Node::freq
-        }
-    };
-
-    // Priority Queue to store the nodes of the Huffman Tree.
-    // So the priority queue/Min Heap is supposed to store Node type objects.
-    // Priority Queue is a Max heap by default. Compare is used to convert it to a Min heap.
-    // Parameters of the priority_queue constructor : 
-        // 1. Type of the objects to be stored in the priority queue.
-        // 2. Type of the container to be used to store the objects. (vector is used here.)
-        // 3. Comparator function to compare the objects.
-    priority_queue<Node*, vector<Node*>, compare> pq;
-    // pq.top() -> returns the top element of the priority queue.
-    // pq.push(node) -> pushes the node into the priority queue.
-    // pq.pop() -> pops the top element of the priority queue.
-    // pq.size() -> returns the size of the priority queue.
-    // pq.empty() -> returns true if the priority queue is empty, false otherwise.
-};
 
 /** 
     Function to print the heap contents one after the other. 
@@ -133,7 +94,7 @@ void print_frequency_map(unordered_map<char, int>& freq_map)
         c. Push the new node back into the heap.
     3. The root of the Huffman Tree is the only node left in the heap.
 */
-Node* build_huffman_tree(unordered_map<char, int>& freq_map, bool debug = false) 
+Node* build_huffman_tree(unordered_map<char, int>& freq_map, bool debug) 
 {
     // Create a new Min Heap object.
     MinHeap* min_heap = new MinHeap();
@@ -199,7 +160,7 @@ void count_frequency(string& text, unordered_map<char, int>& freq_map)  //Note :
     @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
     @return void
 */
-void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huffmanCode, bool debug = false)
+void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huffmanCode, bool debug)
 {
     if (root != nullptr) {
         if (root->left == nullptr && root->right == nullptr) {
@@ -219,7 +180,7 @@ void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huf
     @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
     @return string : The encoded text
 */
-string get_encoded_text(string& text, unordered_map<char, string>& huffmanCode, bool debug = false)
+string get_encoded_text(string& text, unordered_map<char, string>& huffmanCode, bool debug)
 {
     string encoded_text = "";
     for (char c : text) {
@@ -236,7 +197,7 @@ string get_encoded_text(string& text, unordered_map<char, string>& huffmanCode, 
     @param string& decoded_text : Reference to the decoded text
     @return void
 */
-void get_decode_text(Node* root, int &index, string& encoded_text, string& decoded_text, bool debug = false)
+void get_decode_text(Node* root, int &index, string& encoded_text, string& decoded_text, bool debug)
 {
 	if (root == nullptr) {
 		return;

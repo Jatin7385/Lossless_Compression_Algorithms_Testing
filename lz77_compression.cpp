@@ -1,6 +1,7 @@
 # include <iostream>
 # include <string>
 # include <vector>
+# include "lz77_compression.h"
 
 using namespace std;
 
@@ -8,33 +9,6 @@ int search_buffer_size = 43; // Size of the search buffer -- The substring alrea
 int look_ahead_buffer_size = 8; //  Size of the look ahead buffer -- THe buffer ahead of the 
                                 // current character to be searched for maximum possible match 
 int counter = 0; // Counter to input data into the Tokens Array
-
-/*
-  The structure holding the metadata of characters.
-  - Offset : How many characters do I need to go back to find the longest match from my current position.
-  - Length : Length of the longest match found from the offset position.
-  - Next Char : Still not very sure. Holds the next character after the longest match.
-
-  1 Token -> 4B + 4B + 1B = 9 Bytes. This is code/debugging friendly, but instead of compressing total size,
-  it expands the size due to the overhead.
-
-  Eg : 
-    --> Original Text to be compressed :: The computerphile channel handles computer topics. :: Size :: 50
-    --> Compressed Data :: The computrhilhane dsrtpc. :: Size : 234 -> 26*9 ==> That's expansion instead of compression.
-    --> Decompressed Data :: The computerphile channel handles computer topics. :: Size : 50
-
-    Even with uint8_t -> 3Bytes per token. 3*26 = 78. Original Size was 50. Helps, but still no good.
-
-  Ideally the solution is to use a BitWriter and BitReader instead. (Writing bits to stream).
-*/
-struct Token
-{
-    // int offset; // The offset of the longest match. ---> int uses 32 bits - 4 Bytes
-    // int length_of_match; // The length of the longest match.
-    uint8_t offset; // uint8_t -> 8 bits - 1 Byte
-    uint8_t length_of_match;
-    char next_char; // The next char after the longest match. --> char uses 8bits - 1 Byte.
-};
 
 /*
   Function used to compress the input text using LZ77 Compression.
@@ -153,6 +127,7 @@ string decompress(Token* compressed)
 
 int main()
 {
+    // string text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
     string text = "The computerphile channel handles computer topics.";
     cout << "Sizeof Char :: " << sizeof(char) << " :: Sizeof Int :: " << sizeof(uint8_t) << endl;
     cout << "Original Text to be compressed :: " << text << " :: Size :: " << (sizeof(char) * text.length()) << endl;
