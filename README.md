@@ -18,6 +18,13 @@ Rough test results and insights mentioned below. Structured results present in o
 - I see an expansion with the Huffman after LZ77 Compression here. From preliminary read ups, I see, one would need to use Bit Packed Fix for this.
 ### With Bit Packed Encoding for Huffman, we get a 12.4158 compression ratio. Jeezzzz
 <img width="1206" height="79" alt="image" src="https://github.com/user-attachments/assets/6cef2f6b-4acd-4793-bd92-b0a71a64de7c" />
+### Difference in size between normal and bitpacked
+<img width="330" height="42" alt="image" src="https://github.com/user-attachments/assets/1a3ec298-ed81-4eaa-8d1e-77eb437e8b37" />
+- Non Bit Packed :: 231104
+- Bit Packed :: 28888
+- Non Bit Packed / Bit Packed = 8 as expected.
+- Normal string "10101", each 1 or 0 is stored into a Byte(8 bits). Bit packing stores 8 such bits into 1 Byte.  
+
 
 
 ## Brotli Grid search on tunable parameters for Form Model JSON : 
@@ -336,6 +343,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
