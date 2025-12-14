@@ -15,7 +15,10 @@ Rough test results and insights mentioned below. Structured results present in o
 
 ## DEFLATE
 <img width="1238" height="106" alt="image" src="https://github.com/user-attachments/assets/d7343bda-ebd7-4b05-a60d-4f15b29e64af" />
-- I see an expansion with the Huffman after LZ77 Compression here. From preliminary read ups, I see, one would need to use Bitwriter for this.
+- I see an expansion with the Huffman after LZ77 Compression here. From preliminary read ups, I see, one would need to use Bit Packed Fix for this.
+### With Bit Packed Encoding for Huffman, we get a 12.4158 compression ratio. Jeezzzz
+<img width="1206" height="79" alt="image" src="https://github.com/user-attachments/assets/6cef2f6b-4acd-4793-bd92-b0a71a64de7c" />
+
 
 ## Brotli Grid search on tunable parameters for Form Model JSON : 
 
@@ -333,6 +336,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
