@@ -56,10 +56,10 @@ Rough test results and insights mentioned below. Structured results present in o
 
 ## GZip Search on Tunable Parameter for Form Model JSON : 
 | Optimzed For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
-|--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
-| Optimized Time | 3 |   90.50% |   0.003169s |     0.007065 MB |  90.5050
-| Optimized Peak Memory | 8 |   92.82% |   0.007238s |     0.006446 MB |  92.8190
-| Optimized Compression Percentage | 9 |   92.96% |   0.012348s |     0.006494 MB |  92.9583
+|--------------|----------------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 2 |   90.16% |   0.003016s |     0.007189 MB |  90.1555
+| Optimized Peak Memory | 9 |   92.96% |   0.012065s |     0.006218 MB |  92.9583
+| Optimized Compression Percentage | 9 |   92.96% |   0.012065s |     0.006218 MB |  92.9583
 
 
 
@@ -360,6 +360,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
