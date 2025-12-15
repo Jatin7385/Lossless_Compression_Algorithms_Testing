@@ -16,8 +16,12 @@ Rough test results and insights mentioned below. Structured results present in o
 ## DEFLATE
 <img width="1238" height="106" alt="image" src="https://github.com/user-attachments/assets/d7343bda-ebd7-4b05-a60d-4f15b29e64af" />
 - I see an expansion with the Huffman after LZ77 Compression here. From preliminary read ups, I see, one would need to use Bit Packed Fix for this.
-### With Bit Packed Encoding for Huffman, we get a 12.4158 compression ratio. Jeezzzz
-<img width="1206" height="79" alt="image" src="https://github.com/user-attachments/assets/6cef2f6b-4acd-4793-bd92-b0a71a64de7c" />
+
+### With Bit Packed Encoding
+<img width="847" height="117" alt="image" src="https://github.com/user-attachments/assets/ae0c9277-cea4-45f8-a706-547c7b450302" />
+- Decompression verified
+
+
 ### Difference in size between normal and bitpacked
 <img width="330" height="42" alt="image" src="https://github.com/user-attachments/assets/1a3ec298-ed81-4eaa-8d1e-77eb437e8b37" />
 - Non Bit Packed :: 231104
@@ -343,6 +347,8 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
+
 
 
 
