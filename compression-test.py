@@ -19,11 +19,11 @@ tracemalloc.start()
 profiler = cProfile.Profile()
 profiler.enable()
 
-brotliProcessing(text)
+# brotliProcessing(text)
 # gzipProcessing(text)
 # lz4Processing(text)
 # zstdProcessing(text)
-# snappyProcessing(text)
+result = snappyProcessing(text)
 
 # ------------------- End Profiling -------------------
 profiler.disable()
@@ -38,3 +38,9 @@ print(f"Peak memory usage: {peak/1e6:.6f} MB")
 # Print CPU profiling stats (top 10 functions)
 stats = pstats.Stats(profiler)
 stats.sort_stats("cumulative").print_stats(10)
+
+
+print(f"| Optimzed For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |")
+print(f"|--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|")
+print(f"| Optimized Snappy | {result['compression_percentage']:>7.2f}% | {end_time - start_time:.6f}s | {current/1e6:.6f} MB | {result['compression_percentage']:>8.4f}")
+            
