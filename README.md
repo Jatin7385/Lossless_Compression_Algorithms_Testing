@@ -19,7 +19,12 @@ Rough test results and insights mentioned below. Structured results present in o
 
 ### With Bit Packed Encoding
 <img width="847" height="117" alt="image" src="https://github.com/user-attachments/assets/ae0c9277-cea4-45f8-a706-547c7b450302" />
-- Decompression verified
+- Decompression verified --> 4KB Sliding Window Size, 258 Bytes - Look Ahead Buffer Size.
+
+- As per https://patents.google.com/patent/US9577665B2/en - Sliding Window Size is supposed to be 32KB. 
+<img width="876" height="116" alt="image" src="https://github.com/user-attachments/assets/dc3127a4-cafb-4e08-87d4-0c1edb0750da" />
+
+- Decompression verified, and Compression Ratio improved. Longer context helps.
 
 
 ### Difference in size between normal and bitpacked
@@ -347,6 +352,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
