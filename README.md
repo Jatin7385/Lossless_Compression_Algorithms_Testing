@@ -54,6 +54,14 @@ Rough test results and insights mentioned below. Structured results present in o
 - Higher Lgwin : Larger Sliding window of dictionary : Slower compression : Higher Compression Percentage
 
 
+## GZip Search on Tunable Parameter for Form Model JSON : 
+| Optimzed For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 3 |   90.50% |   0.003169s |     0.007065 MB |  90.5050
+| Optimized Peak Memory | 8 |   92.82% |   0.007238s |     0.006446 MB |  92.8190
+| Optimized Compression Percentage | 9 |   92.96% |   0.012348s |     0.006494 MB |  92.9583
+
+
 
 ## Brotli Tunable parameters and what their ranges mean : 
 - quality (0–11)
@@ -352,6 +360,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
