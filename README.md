@@ -38,11 +38,11 @@ Rough test results and insights mentioned below. Structured results present in o
 
 ## Brotli Grid search on tunable parameters for Form Model JSON : 
 
-Optimized For| Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Percentage |
-|------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
-|Minimum Time| 0 | 1 | 23 |   91.10% |   0.001210s |     0.002618 MB |  91.0992 |
-|Minimum Peak Memory| 1 | 0 | 22 |   92.16% |   0.001427s |     0.002170 MB |  92.1617 |
-|Maximum Compression Percentage| 11 | 2 | 19 |   95.60% |   0.335548s |     0.002226 MB |  95.6035 |
+| Optimzed For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 0 | 0 | 23 |   91.10% |   0.001495s |     0.003472 MB |  91.0992
+| Optimized Peak Memory | 1 | 0 | 22 |   92.16% |   0.001662s |     0.002365 MB |  92.1617
+| Optimized Compression Percentage | 11 | 2 | 19 |   95.60% |   0.337135s |     0.002555 MB |  95.6035
 
 - Higher quality : Higher Compression Percentage : Slower Compression
 - Lower Quality : Lower compression percentage : Faster compression
@@ -352,6 +352,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
