@@ -38,11 +38,11 @@ Rough test results and insights mentioned below. Structured results present in o
 
 ## Brotli Grid search on tunable parameters for Form Model JSON : 
 
-Optimized For| Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Percentage |
-|------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
-|Minimum Time| 0 | 1 | 23 |   91.10% |   0.001210s |     0.002618 MB |  91.0992 |
-|Minimum Peak Memory| 1 | 0 | 22 |   92.16% |   0.001427s |     0.002170 MB |  92.1617 |
-|Maximum Compression Percentage| 11 | 2 | 19 |   95.60% |   0.335548s |     0.002226 MB |  95.6035 |
+| Optimzed For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 0 | 0 | 23 |   91.10% |   0.001495s |     0.003472 MB |  91.0992
+| Optimized Peak Memory | 1 | 0 | 22 |   92.16% |   0.001662s |     0.002365 MB |  92.1617
+| Optimized Compression Percentage | 11 | 2 | 19 |   95.60% |   0.337135s |     0.002555 MB |  95.6035
 
 - Higher quality : Higher Compression Percentage : Slower Compression
 - Lower Quality : Lower compression percentage : Faster compression
@@ -53,6 +53,40 @@ Optimized For| Quality | Mode | Lgwin | Compression Percentage | Time Taken | Pe
 - Lower Lgwin : Smaller Sliding window of dictionary : Faster compression : Lower Compression Percentage
 - Higher Lgwin : Larger Sliding window of dictionary : Slower compression : Higher Compression Percentage
 
+
+## GZip Search on Tunable Parameter for Form Model JSON : 
+| Optimzed For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|----------------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 2 |   90.16% |   0.003016s |     0.007189 MB |  90.1555
+| Optimized Peak Memory | 9 |   92.96% |   0.012065s |     0.006218 MB |  92.9583
+| Optimized Compression Percentage | 9 |   92.96% |   0.012065s |     0.006218 MB |  92.9583
+
+## LZ4 Grid Search on Tunable Parameters for Form Model JSON : 
+| Optimzed For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|-------------------|------------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 2 | 4 |   88.37% |   0.001240s |     0.002039 MB |  88.3681
+| Optimized Peak Memory | 15 | 5 |   92.79% |   0.013395s |     0.001913 MB |  92.7854
+| Optimized Compression Percentage | 12 | 6 |   92.79% |   0.013101s |     0.002030 MB |  92.7900
+
+## Snappy Does not have Tunable Parameters
+| Optimzed For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|------------------------|------------|-------------------|-------------------|
+| Optimized |   86.02% | 0.002113s | 0.005807 MB |  86.0183
+
+
+## Form Model JSON Performance
+| Optimzed For |  Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|------------------------|------------|-------------------|-------------------|
+| Brotli - Optimized Time  |   91.10% |   0.001495s |     0.003472 MB |  91.0992
+| Brotli -Optimized Peak Memory  |   92.16% |   0.001662s |     0.002365 MB |  92.1617
+| Brotli - Optimized Compression Percentage |   95.60% |   0.337135s |     0.002555 MB |  95.6035
+| GZip - Optimized Time |   90.16% |   0.003016s |     0.007189 MB |  90.1555
+| GZip - Optimized Peak Memory |   92.96% |   0.012065s |     0.006218 MB |  92.9583
+| GZip - Optimized Compression Percentage |   92.96% |   0.012065s |     0.006218 MB |  92.9583
+| LZ4 - Optimized Time |   88.37% |   0.001240s |     0.002039 MB |  88.3681
+| LZ4 - Optimized Peak Memory |  92.79% |   0.013395s |     0.001913 MB |  92.7854
+| LZ4 - Optimized Compression Percentage |   92.79% |   0.013101s |     0.002030 MB |  92.7900
+| Snappy - Optimized |   86.02% | 0.002113s | 0.005807 MB |  86.0183
 
 
 ## Brotli Tunable parameters and what their ranges mean : 
@@ -352,6 +386,12 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
+
+
+
+
+
 
 
 
