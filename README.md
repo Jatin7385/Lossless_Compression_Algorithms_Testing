@@ -73,6 +73,22 @@ Rough test results and insights mentioned below. Structured results present in o
 |--------------|------------------------|------------|-------------------|-------------------|
 | Optimized |   86.02% | 0.002113s | 0.005807 MB |  86.0183
 
+
+## Form Model JSON Performance
+| Optimzed For |  Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|------------------------|------------|-------------------|-------------------|
+| Brotli - Optimized Time  |   91.10% |   0.001495s |     0.003472 MB |  91.0992
+| Brotli -Optimized Peak Memory  |   92.16% |   0.001662s |     0.002365 MB |  92.1617
+| Brotli - Optimized Compression Percentage |   95.60% |   0.337135s |     0.002555 MB |  95.6035
+| GZip - Optimized Time |   90.16% |   0.003016s |     0.007189 MB |  90.1555
+| GZip - Optimized Peak Memory |   92.96% |   0.012065s |     0.006218 MB |  92.9583
+| GZip - Optimized Compression Percentage |   92.96% |   0.012065s |     0.006218 MB |  92.9583
+| LZ4 - Optimized Time |   88.37% |   0.001240s |     0.002039 MB |  88.3681
+| LZ4 - Optimized Peak Memory |  92.79% |   0.013395s |     0.001913 MB |  92.7854
+| LZ4 - Optimized Compression Percentage |   92.79% |   0.013101s |     0.002030 MB |  92.7900
+| Snappy - Optimized |   86.02% | 0.002113s | 0.005807 MB |  86.0183
+
+
 ## Brotli Tunable parameters and what their ranges mean : 
 - quality (0–11)
 Meaning:
@@ -370,6 +386,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
