@@ -68,6 +68,11 @@ Rough test results and insights mentioned below. Structured results present in o
 | Optimized Peak Memory | 15 | 5 |   92.79% |   0.013395s |     0.001913 MB |  92.7854
 | Optimized Compression Percentage | 12 | 6 |   92.79% |   0.013101s |     0.002030 MB |  92.7900
 
+## Snappy Does not have Tunable Parameters
+| Optimzed For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|------------------------|------------|-------------------|-------------------|
+| Optimized |   86.02% | 0.002113s | 0.005807 MB |  86.0183
+
 ## Brotli Tunable parameters and what their ranges mean : 
 - quality (0–11)
 Meaning:
@@ -365,6 +370,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
