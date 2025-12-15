@@ -5,7 +5,8 @@
 
 using namespace std;
 
-int search_buffer_size = 4096; // Size of the search buffer -- The substring already parsed.
+// To this (RFC 1951 standard):
+int search_buffer_size = 32768;  // 32KB = 2^15 // Size of the search buffer -- The substring already parsed.
 int look_ahead_buffer_size = 258; //  Size of the look ahead buffer -- THe buffer ahead of the 
                                 // current character to be searched for maximum possible match 
 int counter = 0; // Counter to input data into the Tokens Array
