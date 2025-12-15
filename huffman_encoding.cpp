@@ -180,29 +180,34 @@ void get_huffman_codes(Node* root, string code, unordered_map<char, string>& huf
     Function to get the encoded text[Not Bit Packed].
     @param string text : The input text
     @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
-    @return string : The encoded text
+    @return HuffmanResult : The HuffmanResult structure holding the encoded text and the total bits used.
 */
-string get_encoded_text(string& text, unordered_map<char, string>& huffmanCode, bool debug)
+HuffmanResult get_encoded_text(string& text, unordered_map<char, string>& huffmanCode, bool debug)
 {
+    HuffmanResult result;
     string encoded_text = "";
     for (char c : text) {
         encoded_text += huffmanCode[c];
     }
+    result.data = encoded_text;
+    // result.total_bits = encoded_text.size(); // Not needed as we are not bit packing.
     cout << "Non Bit Packed Size :: " << encoded_text.size() << endl;
-    return encoded_text;
+    return result;
 }
 
 /** 
     Function to get Bit Packed encoded text.
     @param string text : The input text
     @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
-    @return string : The encoded text
+    @param bool debug : debug flag
+    @return HuffmanResult : The HuffmanResult structure holding the encoded text and the total bits used.
 
     Quick Note :: A string has characters with each char(1 or 0) holding 1 Byte/8 bits. Bit packing helps pack these into actual bits.
     This compresses the size.
 */
-string get_encoded_bitpacked_text(string& text, unordered_map<char, string>& huffmanCode, bool debug)
+HuffmanResult get_encoded_bitpacked_text(string& text, unordered_map<char, string>& huffmanCode, bool debug)
 {
+    HuffmanResult result;
     size_t total_bits = 0;
     for (char c : text) total_bits += huffmanCode[c].size();
     
@@ -218,9 +223,10 @@ string get_encoded_bitpacked_text(string& text, unordered_map<char, string>& huf
             bit_pos++;
         }
     }
-
+    result.data = packed; // Storing the packed string in the result structure.
+    result.total_bits = total_bits; // Storing the total bits used in the result structure.
     cout << "Bit Packed Size :: " << packed.size() << endl;
-    return packed;
+    return result;
 }
 
 /** 
@@ -296,7 +302,7 @@ void free_huffman_tree(Node* root)
     }
 }
 
-string huffman_encoding_compress(string& input, bool bit_packed, bool debug)
+HuffmanResult huffman_encoding_compress(string& input, bool bit_packed, bool debug)
 {
     // Variables
     unordered_map<char, int> freq_map; // Hash Table to store the frequency of each character
@@ -316,10 +322,10 @@ string huffman_encoding_compress(string& input, bool bit_packed, bool debug)
     get_huffman_codes(root, "", huffmanCode, debug);
 
     // Get Encoded Text
-    string encoded_text = bit_packed ? get_encoded_bitpacked_text(input, huffmanCode, debug) : get_encoded_text(input, huffmanCode, debug);
-    if (debug) std::cout << "Encoded Text : " << encoded_text << std::endl;
+    HuffmanResult result = bit_packed ? get_encoded_bitpacked_text(input, huffmanCode, debug) : get_encoded_text(input, huffmanCode, debug); // Takes in (input, huffmanCode, debug_flag).
+    if (debug) std::cout << "Encoded Text : " << result.data << " :: Total Bits : " << result.total_bits << std::endl;
 
-    return encoded_text;
+    return result;
 }
 
 

@@ -6,6 +6,12 @@
 #include <queue> // Provides priority_queue functionality
 #include <vector>
 
+// Huffman Result structure to store the string result and the total bits used.
+struct HuffmanResult {
+    std::string data;
+    size_t total_bits;
+};
+
 struct BitReader {
     const std::string& data;
     size_t bit_pos = 0;
@@ -123,17 +129,17 @@ void get_huffman_codes(Node* root, std::string code, std::unordered_map<char,std
     Function to get the encoded text.
     @param std::stringtext : The input text
     @param std::unordered_map<char,std::string>& huffmanCode : Reference to the Huffman Code map
-    @return std::string: The encoded text
+    @return HuffmanResult : The HuffmanResult structure holding the encoded text and the total bits used.
 */
-std::string get_encoded_text(std::string& text, std::unordered_map<char,std::string>& huffmanCode, bool debug = false);
+HuffmanResult get_encoded_text(std::string& text, std::unordered_map<char,std::string>& huffmanCode, bool debug = false);
 
 /** 
     Function to get Bit Packed encoded text.
     @param string text : The input text
     @param unordered_map<char, string>& huffmanCode : Reference to the Huffman Code map
-    @return string : The encoded text
+    @return HuffmanResult : The HuffmanResult structure holding the encoded text and the total bits used.
 */
-std::string get_encoded_bitpacked_text(std::string& text, std::unordered_map<char, std::string>& huffmanCode);
+HuffmanResult get_encoded_bitpacked_text(std::string& text, std::unordered_map<char, std::string>& huffmanCode);
 
 /** 
     Function to decode the encoded text.
@@ -159,9 +165,9 @@ std::string get_bit_packed_decoded_text(Node* root, const std::string& packed, s
     All encompassing function to take in the input and return compressed output.
     @param string input
     @param bool debug
-    @returns string compressed output
+    @returns HuffmanResult : The HuffmanResult structure holding the encoded text and the total bits used.
 */
-std::string huffman_encoding_compress(std::string& input, bool bit_packed = false, bool debug = false);
+HuffmanResult huffman_encoding_compress(std::string& input, bool bit_packed = false, bool debug = false);
 
 /**
     All encompassing function to take in the compressed input and return decompressed output.
