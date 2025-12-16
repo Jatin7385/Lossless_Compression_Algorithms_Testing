@@ -61,6 +61,13 @@ Rough test results and insights mentioned below. Structured results present in o
 | Optimized Peak Memory | 9 |   92.96% |   0.012065s |     0.006218 MB |  92.9583
 | Optimized Compression Percentage | 9 |   92.96% |   0.012065s |     0.006218 MB |  92.9583
 
+## ZSTD Search on Tunable Parameter for Form Model JSON : 
+| Optimzed For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|
+| Optimized Time | 2 |   92.51% |   0.001848s |     0.003965 MB |  92.5056
+| Optimized Peak Memory | 22 |   95.32% |   0.123986s |     0.002192 MB |  95.3205
+| Optimized Compression Percentage | 22 |   95.32% |   0.123986s |     0.002192 MB |  95.3205
+
 ## LZ4 Grid Search on Tunable Parameters for Form Model JSON : 
 | Optimzed For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|-------------------|------------|------------------------|------------|-------------------|-------------------|
@@ -83,6 +90,9 @@ Rough test results and insights mentioned below. Structured results present in o
 | GZip - Optimized Time |   90.16% |   0.003016s |     0.007189 MB |  90.1555
 | GZip - Optimized Peak Memory |   92.96% |   0.012065s |     0.006218 MB |  92.9583
 | GZip - Optimized Compression Percentage |   92.96% |   0.012065s |     0.006218 MB |  92.9583
+| ZSTD - Optimized Time |   92.51% |   0.001848s |     0.003965 MB |  92.5056
+| ZSTD - Optimized Peak Memory |   95.32% |   0.123986s |     0.002192 MB |  95.3205
+| ZSTD - Optimized Compression Percentage |   95.32% |   0.123986s |     0.002192 MB |  95.3205
 | LZ4 - Optimized Time |   88.37% |   0.001240s |     0.002039 MB |  88.3681
 | LZ4 - Optimized Peak Memory |  92.79% |   0.013395s |     0.001913 MB |  92.7854
 | LZ4 - Optimized Compression Percentage |   92.79% |   0.013101s |     0.002030 MB |  92.7900
@@ -386,6 +396,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
