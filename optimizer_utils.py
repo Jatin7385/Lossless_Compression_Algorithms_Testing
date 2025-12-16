@@ -11,6 +11,7 @@ class CompressionResult:
     Results from a compression algorithm.
     """
 
+    level: int
     quality: int
     mode: int
     lgwin: int
@@ -20,6 +21,7 @@ class CompressionResult:
     timeTaken: float
     peakMemoryUsage: float
     compressionPercentage: float
+    compressionRatio: float
 
     def __str__(self):
         return f"| {self.quality} | {self.mode} | {self.lgwin} | {self.timeTaken:.6f}s | {self.peakMemoryUsage:.6f} MB | {self.compressionPercentage} |"
@@ -37,7 +39,7 @@ class Optimizer:
         self.compression_algorithm = compression_algorithm
         self.printFlag = printFlag
 
-    def profile(self, compressionLevel = None, blockSize = None, compressLevel = None, quality = None, mode = None, lgwin = None) -> CompressionResult:
+    def profile(self, level = None, compressionLevel = None, blockSize = None, compressLevel = None, quality = None, mode = None, lgwin = None) -> CompressionResult:
         """
         Profiling the parameters passed and returning CompressionResult object.
         """
@@ -60,8 +62,8 @@ class Optimizer:
             result = gzipProcessing(self.text, custom_compress_level=compressLevel, printFlag=self.printFlag)
         elif self.compression_algorithm == 'lz4':
             result = lz4Processing(self.text, compression_level=compressionLevel, block_size=blockSize, printFlag=self.printFlag)
-        # elif self.compression_algorithm == 'zstd':
-        #     result = zstdProcessing(self.text, self.printFlag, quality, mode, lgwin)
+        elif self.compression_algorithm == 'zstd':
+            result = zstdProcessing(self.text, level=level, printFlag=self.printFlag)
         # elif self.compression_algorithm == 'snappy':
         #     result = snappyProcessing(self.text, self.printFlag, quality, mode, lgwin)
 
@@ -74,7 +76,8 @@ class Optimizer:
         timeTaken = end_time - start_time
         peakMemoryUsage = current/1e6
 
-        return CompressionResult(compressionLevel=compressionLevel, 
+        return CompressionResult(level=level,
+                                 compressionLevel=compressionLevel, 
                                  blockSize=blockSize,
                                  compressLevel=compressLevel, 
                                  quality=quality, 
@@ -82,7 +85,58 @@ class Optimizer:
                                  lgwin=lgwin, 
                                  timeTaken=timeTaken, 
                                  peakMemoryUsage=peakMemoryUsage, 
-                                 compressionPercentage=result['compression_percentage'])
+                                 compressionPercentage=result['compression_percentage'],
+                                 compressionRatio=result['compression_ratio'])
+
+    def run_zstd_grid_search(self, 
+                        logFlag: bool = False,
+                        levelRange: range = range(1, 23)) -> dict:
+        """
+        Run the grid search and find the optimal parameters.
+        """
+
+        # Dictionary to store the optimal results
+        optimalResults = {
+            'optimizedTime': None,
+            'optimizedPeakMemory': None,
+            'optimizedCompressionPercentage': None,
+            'optimizedCompressionRatio': None
+        }
+
+        # Initialize the minimum and maximum values for each metric.
+        minimumTimeTaken = float('inf')
+        minimumPeakMemoryUsage = float('inf')
+        maximumCompressionPercentage = float('-inf')
+        maximumCompressionRatio = float('-inf')
+
+        # Grid Search - O(n)
+        for level in levelRange:
+            result = self.profile(compressionLevel=None, blockSize=None, compressLevel=None, quality=None, mode=None, lgwin=None, level=level) # Call profile method to get CompressionResult object
+
+
+            if result.timeTaken < minimumTimeTaken:
+                minimumTimeTaken = result.timeTaken
+                optimalResults['optimizedTime'] = result
+            if result.peakMemoryUsage < minimumPeakMemoryUsage:
+                minimumPeakMemoryUsage = result.peakMemoryUsage
+                optimalResults['optimizedPeakMemory'] = result
+            if result.compressionPercentage > maximumCompressionPercentage:
+                maximumCompressionPercentage = result.compressionPercentage
+                optimalResults['optimizedCompressionPercentage'] = result
+            if result.compressionRatio > maximumCompressionRatio:
+                maximumCompressionRatio = result.compressionRatio
+                optimalResults['optimizedCompressionRatio'] = result
+            if logFlag:
+                print(f"{level:>7} | "
+                    f"{result.compressionPercentage:>7.2f}% | "
+                    f"{result.timeTaken:>10.6f} | "
+                    f"{result.peakMemoryUsage:>12.6f} | "
+                    f"{result.compressionRatio:>8.4f}")
+    
+
+        return optimalResults
+
+
 
     def run_lz4_grid_search(self, 
                         logFlag: bool = False,
@@ -195,13 +249,15 @@ class Optimizer:
         optimalResults = {
             'optimizedTime': None,
             'optimizedPeakMemory': None,
-            'optimizedCompressionPercentage': None
+            'optimizedCompressionPercentage': None,
+            'optimizedCompressionRatio': None
         }
 
         # Initialize the minimum and maximum values for each metric.
         minimumTimeTaken = float('inf')
         minimumPeakMemoryUsage = float('inf')
         maximumCompressionPercentage = float('-inf')
+        maximumCompressionRatio = float('-inf')
 
         # Grid Search - O(n^3)
         for quality in qualityRange:
@@ -219,13 +275,15 @@ class Optimizer:
                     if result.compressionPercentage > maximumCompressionPercentage:
                         maximumCompressionPercentage = result.compressionPercentage
                         optimalResults['optimizedCompressionPercentage'] = result
-                    
+                    if result.compressionRatio > maximumCompressionRatio:
+                        maximumCompressionRatio = result.compressionRatio
+                        optimalResults['optimizedCompressionRatio'] = result
                     if logFlag:
-                        print(f"{quality:>7} | {mode:>4} | {lgwin:>5} | "
+                        print(f"{level:>7} | "
                           f"{result.compressionPercentage:>7.2f}% | "
                           f"{result.timeTaken:>10.6f} | "
                           f"{result.peakMemoryUsage:>12.6f} | "
-                          f"{result.compressionPercentage:>8.4f}")
+                          f"{result.compressionRatio:>8.4f}")
     
 
         return optimalResults
@@ -236,25 +294,35 @@ class Optimizer:
             Print the optimal results.
             '''
             print(f"| Optimzed For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |")
-            print(f"|--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|")
-            print(f"| Optimized Time | {optimalResults['optimizedTime'].compressionLevel} | {optimalResults['optimizedTime'].blockSize} | {optimalResults['optimizedTime'].compressionPercentage:>7.2f}% | {optimalResults['optimizedTime'].timeTaken:>10.6f}s | {optimalResults['optimizedTime'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedTime'].compressionPercentage:>8.4f}")
-            print(f"| Optimized Peak Memory | {optimalResults['optimizedPeakMemory'].compressionLevel} | {optimalResults['optimizedPeakMemory'].blockSize} | {optimalResults['optimizedPeakMemory'].compressionPercentage:>7.2f}% | {optimalResults['optimizedPeakMemory'].timeTaken:>10.6f}s | {optimalResults['optimizedPeakMemory'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedPeakMemory'].compressionPercentage:>8.4f}")
-            print(f"| Optimized Compression Percentage | {optimalResults['optimizedCompressionPercentage'].compressionLevel} | {optimalResults['optimizedCompressionPercentage'].blockSize} | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>7.2f}% | {optimalResults['optimizedCompressionPercentage'].timeTaken:>10.6f}s | {optimalResults['optimizedCompressionPercentage'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>8.4f}")
+            print(f"|--------------|---------|------|-------|------------------------|------------|-------------------|")
+            print(f"| Optimized Time | {optimalResults['optimizedTime'].compressionLevel} | {optimalResults['optimizedTime'].blockSize} | {optimalResults['optimizedTime'].compressionPercentage:>7.2f}% | {optimalResults['optimizedTime'].timeTaken:>10.6f}s | {optimalResults['optimizedTime'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedTime'].compressionRatio:>8.4f}")
+            print(f"| Optimized Peak Memory | {optimalResults['optimizedPeakMemory'].compressionLevel} | {optimalResults['optimizedPeakMemory'].blockSize} | {optimalResults['optimizedPeakMemory'].compressionPercentage:>7.2f}% | {optimalResults['optimizedPeakMemory'].timeTaken:>10.6f}s | {optimalResults['optimizedPeakMemory'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedPeakMemory'].compressionRatio:>8.4f}")
+            print(f"| Optimized Compression Percentage | {optimalResults['optimizedCompressionPercentage'].compressionLevel} | {optimalResults['optimizedCompressionPercentage'].blockSize} | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>7.2f}% | {optimalResults['optimizedCompressionPercentage'].timeTaken:>10.6f}s | {optimalResults['optimizedCompressionPercentage'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedCompressionPercentage'].compressionRatio:>8.4f}")
         elif self.compression_algorithm == 'gzip':
             '''
             Print the optimal results.
             '''
             print(f"| Optimzed For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |")
             print(f"|--------------|----------------|------------------------|------------|-------------------|-------------------|")
-            print(f"| Optimized Time | {optimalResults['optimizedTime'].compressLevel} | {optimalResults['optimizedTime'].compressionPercentage:>7.2f}% | {optimalResults['optimizedTime'].timeTaken:>10.6f}s | {optimalResults['optimizedTime'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedTime'].compressionPercentage:>8.4f}")
-            print(f"| Optimized Peak Memory | {optimalResults['optimizedPeakMemory'].compressLevel} | {optimalResults['optimizedPeakMemory'].compressionPercentage:>7.2f}% | {optimalResults['optimizedPeakMemory'].timeTaken:>10.6f}s | {optimalResults['optimizedPeakMemory'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedPeakMemory'].compressionPercentage:>8.4f}")
-            print(f"| Optimized Compression Percentage | {optimalResults['optimizedCompressionPercentage'].compressLevel} | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>7.2f}% | {optimalResults['optimizedCompressionPercentage'].timeTaken:>10.6f}s | {optimalResults['optimizedCompressionPercentage'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>8.4f}")
+            print(f"| Optimized Time | {optimalResults['optimizedTime'].compressLevel} | {optimalResults['optimizedTime'].compressionPercentage:>7.2f}% | {optimalResults['optimizedTime'].timeTaken:>10.6f}s | {optimalResults['optimizedTime'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedTime'].compressionRatio:>8.4f}")
+            print(f"| Optimized Peak Memory | {optimalResults['optimizedPeakMemory'].compressLevel} | {optimalResults['optimizedPeakMemory'].compressionPercentage:>7.2f}% | {optimalResults['optimizedPeakMemory'].timeTaken:>10.6f}s | {optimalResults['optimizedPeakMemory'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedPeakMemory'].compressionRatio:>8.4f}")
+            print(f"| Optimized Compression Percentage | {optimalResults['optimizedCompressionPercentage'].compressLevel} | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>7.2f}% | {optimalResults['optimizedCompressionPercentage'].timeTaken:>10.6f}s | {optimalResults['optimizedCompressionPercentage'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedCompressionPercentage'].compressionRatio:>8.4f}")
         elif self.compression_algorithm == 'brotli':
             '''
             Print the optimal results.
             '''
             print(f"| Optimzed For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |")
             print(f"|--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|")
-            print(f"| Optimized Time | {optimalResults['optimizedTime'].quality} | {optimalResults['optimizedTime'].mode} | {optimalResults['optimizedTime'].lgwin} | {optimalResults['optimizedTime'].compressionPercentage:>7.2f}% | {optimalResults['optimizedTime'].timeTaken:>10.6f}s | {optimalResults['optimizedTime'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedTime'].compressionPercentage:>8.4f}")
-            print(f"| Optimized Peak Memory | {optimalResults['optimizedPeakMemory'].quality} | {optimalResults['optimizedPeakMemory'].mode} | {optimalResults['optimizedPeakMemory'].lgwin} | {optimalResults['optimizedPeakMemory'].compressionPercentage:>7.2f}% | {optimalResults['optimizedPeakMemory'].timeTaken:>10.6f}s | {optimalResults['optimizedPeakMemory'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedPeakMemory'].compressionPercentage:>8.4f}")
-            print(f"| Optimized Compression Percentage | {optimalResults['optimizedCompressionPercentage'].quality} | {optimalResults['optimizedCompressionPercentage'].mode} | {optimalResults['optimizedCompressionPercentage'].lgwin} | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>7.2f}% | {optimalResults['optimizedCompressionPercentage'].timeTaken:>10.6f}s | {optimalResults['optimizedCompressionPercentage'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>8.4f}")
+            print(f"| Optimized Time | {optimalResults['optimizedTime'].quality} | {optimalResults['optimizedTime'].mode} | {optimalResults['optimizedTime'].lgwin} | {optimalResults['optimizedTime'].compressionPercentage:>7.2f}% | {optimalResults['optimizedTime'].timeTaken:>10.6f}s | {optimalResults['optimizedTime'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedTime'].compressionRatio:>8.4f}")
+            print(f"| Optimized Peak Memory | {optimalResults['optimizedPeakMemory'].quality} | {optimalResults['optimizedPeakMemory'].mode} | {optimalResults['optimizedPeakMemory'].lgwin} | {optimalResults['optimizedPeakMemory'].compressionPercentage:>7.2f}% | {optimalResults['optimizedPeakMemory'].timeTaken:>10.6f}s | {optimalResults['optimizedPeakMemory'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedPeakMemory'].compressionRatio:>8.4f}")
+            print(f"| Optimized Compression Percentage | {optimalResults['optimizedCompressionPercentage'].quality} | {optimalResults['optimizedCompressionPercentage'].mode} | {optimalResults['optimizedCompressionPercentage'].lgwin} | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>7.2f}% | {optimalResults['optimizedCompressionPercentage'].timeTaken:>10.6f}s | {optimalResults['optimizedCompressionPercentage'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedCompressionPercentage'].compressionRatio:>8.4f}")
+
+        elif self.compression_algorithm == 'zstd':
+            '''
+            Print the optimal results.
+            '''
+            print(f"| Optimzed For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |")
+            print(f"|--------------|---------|------|-------|------------------------|------------|")
+            print(f"| Optimized Time | {optimalResults['optimizedTime'].level} | {optimalResults['optimizedTime'].compressionPercentage:>7.2f}% | {optimalResults['optimizedTime'].timeTaken:>10.6f}s | {optimalResults['optimizedTime'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedTime'].compressionRatio:>8.4f}")
+            print(f"| Optimized Peak Memory | {optimalResults['optimizedPeakMemory'].level} | {optimalResults['optimizedPeakMemory'].compressionPercentage:>7.2f}% | {optimalResults['optimizedPeakMemory'].timeTaken:>10.6f}s | {optimalResults['optimizedPeakMemory'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedPeakMemory'].compressionRatio:>8.4f}")
+            print(f"| Optimized Compression Percentage | {optimalResults['optimizedCompressionPercentage'].level} | {optimalResults['optimizedCompressionPercentage'].compressionPercentage:>7.2f}% | {optimalResults['optimizedCompressionPercentage'].timeTaken:>10.6f}s | {optimalResults['optimizedCompressionPercentage'].peakMemoryUsage:>12.6f} MB | {optimalResults['optimizedCompressionPercentage'].compressionRatio:>8.4f}")

@@ -41,6 +41,6 @@ stats.sort_stats("cumulative").print_stats(10)
 
 
 print(f"| Optimzed For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |")
-print(f"|--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|")
-print(f"| Optimized Snappy | {result['compression_percentage']:>7.2f}% | {end_time - start_time:.6f}s | {current/1e6:.6f} MB | {result['compression_percentage']:>8.4f}")
+print(f"|--------------|---------|------|-------|------------------------|")
+print(f"| Optimized Snappy | {result['compression_percentage']:>7.2f}% | {end_time - start_time:.6f}s | {current/1e6:.6f} MB | {result['compression_ratio']:>8.4f}")
             

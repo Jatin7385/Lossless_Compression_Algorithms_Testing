@@ -44,7 +44,7 @@ def lz4Processing(text: str, compression_level: int = 1, block_size: int = 0, pr
     return {
         'compression_percentage': percentage_reduced,
         'compressed_size': len(compressed),
-        'compression_ratio': len(compressed) / len(text.encode('utf-8'))
+        'compression_ratio': len(text.encode('utf-8')) / len(compressed)
     }
 
 def gzipProcessing(text: str, custom_compress_level: int = 6, printFlag: bool = True) -> bytes: # Default compress level is 6.
@@ -70,10 +70,10 @@ def gzipProcessing(text: str, custom_compress_level: int = 6, printFlag: bool = 
     return {
         'compression_percentage': percentage_reduced,
         'compressed_size': len(compressed),
-        'compression_ratio': len(compressed) / len(text.encode('utf-8'))
+        'compression_ratio': len(text.encode('utf-8')) / len(compressed)
     }
 
-def zstdProcessing(text: str, level: int = 3) -> bytes:
+def zstdProcessing(text: str, level: int = 3, printFlag: bool = True) -> bytes:
     """
     Compress and decompress text using Zstandard.
     
@@ -102,9 +102,13 @@ def zstdProcessing(text: str, level: int = 3) -> bytes:
 
     # Verify
     assert decompressed == text.encode('utf-8')
-    print("Decompression verified ✅")
+    conditionalPrint(printFlag, "Decompression verified ✅")
     
-    return compressed
+    return {
+        'compression_percentage': percentage_reduced,
+        'compressed_size': len(compressed),
+        'compression_ratio': len(text.encode('utf-8')) / len(compressed)
+    }
 
 
 
@@ -141,7 +145,7 @@ def brotliProcessing(text: str, printFlag = True, quality: int = 11, mode: int =
     return {
         'compression_percentage': percentage_reduced,
         'compressed_size': len(compressed),
-        'compression_ratio': len(compressed) / len(text.encode('utf-8'))
+        'compression_ratio': len(text.encode('utf-8')) / len(compressed)
     }
 
 def snappyProcessing(text: str) -> bytes:
@@ -174,5 +178,5 @@ def snappyProcessing(text: str) -> bytes:
     return {
         'compression_percentage': percentage_reduced,
         'compressed_size': len(compressed),
-        'compression_ratio': len(compressed) / len(text.encode('utf-8'))
+        'compression_ratio': len(text.encode('utf-8')) / len(compressed)
     }
