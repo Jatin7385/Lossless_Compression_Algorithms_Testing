@@ -3,6 +3,7 @@ Playing around with the most common lossless compression algorithms. Was interes
 
 Rough test results and insights mentioned below. Structured results present in our blog.
 
+# Custom Implementation
 ## Huffman Encoding
 <img width="1151" height="382" alt="image" src="https://github.com/user-attachments/assets/a45305b8-415f-438c-8c23-7164574a5032" />
 
@@ -15,13 +16,16 @@ Rough test results and insights mentioned below. Structured results present in o
 
 ## DEFLATE
 <img width="1238" height="106" alt="image" src="https://github.com/user-attachments/assets/d7343bda-ebd7-4b05-a60d-4f15b29e64af" />
+
 - I see an expansion with the Huffman after LZ77 Compression here. From preliminary read ups, I see, one would need to use Bit Packed Fix for this.
 
 ### With Bit Packed Encoding
 <img width="847" height="117" alt="image" src="https://github.com/user-attachments/assets/ae0c9277-cea4-45f8-a706-547c7b450302" />
+
 - Decompression verified --> 4KB Sliding Window Size, 258 Bytes - Look Ahead Buffer Size.
 
 - As per https://patents.google.com/patent/US9577665B2/en - Sliding Window Size is supposed to be 32KB. 
+
 <img width="876" height="116" alt="image" src="https://github.com/user-attachments/assets/dc3127a4-cafb-4e08-87d4-0c1edb0750da" />
 
 - Decompression verified, and Compression Ratio improved. Longer context helps.
@@ -29,13 +33,14 @@ Rough test results and insights mentioned below. Structured results present in o
 
 ### Difference in size between normal and bitpacked
 <img width="330" height="42" alt="image" src="https://github.com/user-attachments/assets/1a3ec298-ed81-4eaa-8d1e-77eb437e8b37" />
+
 - Non Bit Packed :: 231104
 - Bit Packed :: 28888
 - Non Bit Packed / Bit Packed = 8 as expected.
 - Normal string "10101", each 1 or 0 is stored into a Byte(8 bits). Bit packing stores 8 such bits into 1 Byte.  
 
 
-
+# Form Model JSON Performance Metrics
 ## Brotli Grid search on tunable parameters for Form Model JSON : 
 
 | Optimzed For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
@@ -97,6 +102,58 @@ Rough test results and insights mentioned below. Structured results present in o
 | LZ4 - Optimized Peak Memory |  92.79% |   0.013395s |     0.001913 MB |  92.7854
 | LZ4 - Optimized Compression Percentage |   92.79% |   0.013101s |     0.002030 MB |  92.7900
 | Snappy - Optimized |   86.02% | 0.002113s | 0.005807 MB |  86.0183
+
+# HTML Performance Metrics
+## Brotli Grid search on tunable parameters for HTML : 
+| Optimzed For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 0 | 2 | 24 |   86.83% |   0.003129s |     0.002472 MB |  86.8264
+| Optimized Peak Memory | 1 | 2 | 10 |   58.74% |   0.011534s |     0.002314 MB |  58.7383
+| Optimized Compression Percentage | 11 | 0 | 20 |   92.60% |   0.723852s |     0.002373 MB |  92.5959
+
+## GZip Grid Search on Tunable Parameters for HTML : 
+| Optimzed For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|----------------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 2 |   86.58% |   0.005109s |     0.007233 MB |  86.5781
+| Optimized Peak Memory | 8 |   89.19% |   0.013862s |     0.006392 MB |  89.1868
+| Optimized Compression Percentage | 9 |   89.20% |   0.018064s |     0.006551 MB |  89.2024
+
+## ZSTD Grid Search on Tunable Parameters for HTML : 
+| Optimzed For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|
+| Optimized Time | 4 |   89.75% |   0.003611s |     0.003898 MB |  89.7516
+| Optimized Peak Memory | 20 |   92.03% |   0.147063s |     0.002152 MB |  92.0334
+| Optimized Compression Percentage | 22 |   92.07% |   0.200937s |     0.002192 MB |  92.0714
+
+## LZ4 Grid Search on Tunable Parameters for HTML : 
+| Optimzed For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|-------------------|
+| Optimized Time | 2 | 4 |   82.72% |   0.002466s |     0.001919 MB |  82.7180
+| Optimized Peak Memory | 16 | 5 |   87.84% |   0.023019s |     0.001864 MB |  87.8399
+| Optimized Compression Percentage | 12 | 6 |   87.84% |   0.022570s |     0.002080 MB |  87.8426
+
+## Snappy Performance for HTML : 
+| Optimzed For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|
+| Optimized Snappy |   79.56% | 0.004691s | 0.005855 MB |  79.5562
+
+## HTML Compiled Performance
+| Optimzed For |  Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|------------------------|------------|-------------------|-------------------|
+| Brotli - Optimized Time |   86.83% |   0.003129s |     0.002472 MB |  86.8264
+| Brotli - Optimized Peak Memory |   58.74% |   0.011534s |     0.002314 MB |  58.7383
+| Brotli - Optimized Compression Percentage |   92.60% |   0.723852s |     0.002373 MB |  92.5959
+| GZip - Optimized Time |   86.58% |   0.005109s |     0.007233 MB |  86.5781
+| GZip - Optimized Peak Memory |   89.19% |   0.013862s |     0.006392 MB |  89.1868
+| GZip - Optimized Compression Percentage |   89.20% |   0.018064s |     0.006551 MB |  89.2024
+| ZSTD - Optimized Time |   89.75% |   0.003611s |     0.003898 MB |  89.7516
+| ZSTD - Optimized Peak Memory |   92.03% |   0.147063s |     0.002152 MB |  92.0334
+| ZSTD - Optimized Compression Percentage |   92.07% |   0.200937s |     0.002192 MB |  92.0714
+| LZ4 - Optimized Time |   82.72% |   0.002466s |     0.001919 MB |  82.7180
+| LZ4 - Optimized Peak Memory |   87.84% |   0.023019s |     0.001864 MB |  87.8399
+| LZ4 - Optimized Compression Percentage |   87.84% |   0.022570s |     0.002080 MB |  87.8426
+| Snappy |   79.56% | 0.004691s | 0.005855 MB |  79.5562
+
 
 
 ## Brotli Tunable parameters and what their ranges mean : 
@@ -396,6 +453,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
