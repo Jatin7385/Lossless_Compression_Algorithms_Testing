@@ -43,7 +43,7 @@ Rough test results and insights mentioned below. Structured results present in o
 # Form Model JSON Performance Metrics
 ## Brotli Grid search on tunable parameters for Form Model JSON : 
 
-| Optimzed For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
 | Optimized Time | 0 | 0 | 23 |   91.10% |   0.001415s |     0.003537 MB |  11.2349
 | Optimized Peak Memory | 3 | 2 | 10 |   81.56% |   0.003139s |     0.002314 MB |   5.4241
@@ -60,34 +60,34 @@ Rough test results and insights mentioned below. Structured results present in o
 
 
 ## GZip Search on Tunable Parameter for Form Model JSON : 
-| Optimzed For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|----------------|------------------------|------------|-------------------|-------------------|
 | Optimized Time | 3 |   90.50% |   0.003147s |     0.007225 MB |  10.5318
 | Optimized Peak Memory | 9 |   92.96% |   0.012399s |     0.006429 MB |  14.2012
 | Optimized Compression Percentage | 9 |   92.96% |   0.012399s |     0.006429 MB |  14.2012
 
 ## ZSTD Search on Tunable Parameter for Form Model JSON : 
-| Optimzed For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|
 | Optimized Time | 3 |   92.84% |   0.001979s |     0.004005 MB |  13.9645
 | Optimized Peak Memory | 20 |   95.28% |   0.057491s |     0.002149 MB |  21.1681
 | Optimized Compression Percentage | 22 |   95.32% |   0.125617s |     0.002250 MB |  21.3697
 
 ## LZ4 Grid Search on Tunable Parameters for Form Model JSON : 
-| Optimzed For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|-------------------|
 | Optimized Time | 2 | 5 |   88.38% |   0.001291s |     0.002087 MB |   8.6065
 | Optimized Peak Memory | 2 | 7 |   88.39% |   0.001332s |     0.001910 MB |   8.6150
 | Optimized Compression Percentage | 12 | 6 |   92.79% |   0.013155s |     0.001962 MB |  13.8697
 
 ## Snappy Does not have Tunable Parameters
-| Optimzed For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|
 | Snappy |   86.02% | 0.002482s | 0.005855 MB |   7.1522
 
 
 ## Form Model JSON Performance
-| Optimzed For |  Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For |  Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|------------------------|------------|-------------------|-------------------|
 | Brotli - Optimized Time |   91.10% |   0.001415s |     0.003537 MB |  11.2349
 | Brotli - Optimized Peak Memory |   81.56% |   0.003139s |     0.002314 MB |   5.4241
@@ -105,35 +105,35 @@ Rough test results and insights mentioned below. Structured results present in o
 
 # HTML Performance Metrics
 ## Brotli Grid search on tunable parameters for HTML : 
-| Optimzed For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
 | Optimized Time | 0 | 0 | 24 |   86.83% |   0.003225s |     0.003514 MB |   7.5909
 | Optimized Peak Memory | 6 | 0 | 13 |   88.15% |   0.007674s |     0.002314 MB |   8.4416
 | Optimized Compression Percentage | 11 | 0 | 20 |   92.60% |   0.717705s |     0.002383 MB |  13.5059
 
 ## GZip Grid Search on Tunable Parameters for HTML : 
-| Optimzed For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|----------------|------------------------|------------|-------------------|-------------------|
 | Optimized Time | 3 |   87.11% |   0.006509s |     0.007180 MB |   7.7586
 | Optimized Peak Memory | 9 |   89.20% |   0.017365s |     0.006388 MB |   9.2613
 | Optimized Compression Percentage | 9 |   89.20% |   0.017365s |     0.006388 MB |   9.2613
 
 ## ZSTD Grid Search on Tunable Parameters for HTML : 
-| Optimzed For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|
 | Optimized Time | 3 |   89.74% |   0.003602s |     0.003957 MB |   9.7459
 | Optimized Peak Memory | 22 |   92.07% |   0.206914s |     0.002134 MB |  12.6126
 | Optimized Compression Percentage | 22 |   92.07% |   0.206914s |     0.002134 MB |  12.6126
 
 ## LZ4 Grid Search on Tunable Parameters for HTML : 
-| Optimzed For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|-----------|--------|
 | Optimized Time | 2 | 5 |   82.75% |   0.002593s |     0.001970 MB |   5.7966
 | Optimized Peak Memory | 7 | 4 |   87.70% |   0.006764s |     0.001920 MB |   8.1334
 | Optimized Compression Percentage | 12 | 6 |   87.84% |   0.023204s |     0.002087 MB |   8.2254
 
 ## Snappy Performance for HTML : 
-| Optimzed For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|
 | Optimized Snappy |   79.56% | 0.005046s | 0.005855 MB |   4.8915
 
@@ -149,42 +149,42 @@ Rough test results and insights mentioned below. Structured results present in o
 | ZSTD - Optimized Time |   89.74% |   0.003602s |     0.003957 MB |   9.7459
 | ZSTD - Optimized Peak Memory |   92.07% |   0.206914s |     0.002134 MB |  12.6126
 | ZSTD - Optimized Compression Percentage |   92.07% |   0.206914s |     0.002134 MB |  12.6126
-| LZ4 - Optimized Time | 2 | 5 |   82.75% |   0.002593s |     0.001970 MB |   5.7966
-| LZ4 - Optimized Peak Memory | 7 | 4 |   87.70% |   0.006764s |     0.001920 MB |   8.1334
-| LZ4 - Optimized Compression Percentage | 12 | 6 |   87.84% |   0.023204s |     0.002087 MB |   8.2254
+| LZ4 - Optimized Time |   82.75% |   0.002593s |     0.001970 MB |   5.7966
+| LZ4 - Optimized Peak Memory |   87.70% |   0.006764s |     0.001920 MB |   8.1334
+| LZ4 - Optimized Compression Percentage |   87.84% |   0.023204s |     0.002087 MB |   8.2254
 | Snappy |   79.56% | 0.005046s | 0.005855 MB |   4.8915
 
 # JS Performance Metrics
 ## Brotli Grid search on tunable parameters for JS : 
-| Optimzed For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
 | Optimized Time | 0 | 0 | 18 |   76.46% |   0.006546s |     0.003686 MB |   4.2474
 | Optimized Peak Memory | 5 | 1 | 23 |   83.15% |   0.017284s |     0.002270 MB |   5.9355
 | Optimized Compression Percentage | 11 | 0 | 21 |   85.63% |   1.269449s |     0.002322 MB |   6.9584
 
 ## GZip Grid Search on Tunable Parameters for JS : 
-| Optimzed For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|----------------|------------------------|------------|-------------------|-------------------|
 | Optimized Time | 2 |   77.45% |   0.012263s |     0.007233 MB |   4.4348
 | Optimized Peak Memory | 8 |   81.66% |   0.045796s |     0.006390 MB |   5.4515
 | Optimized Compression Percentage | 9 |   81.69% |   0.080125s |     0.006494 MB |   5.4602
 
 ## ZSTD Grid Search on Tunable Parameters for JS : 
-| Optimzed For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|
 | Optimized Time | 4 |   80.20% |   0.007290s |     0.003898 MB |   5.0515
 | Optimized Peak Memory | 20 |   85.12% |   0.207782s |     0.002201 MB |   6.7185
 | Optimized Compression Percentage | 22 |   85.13% |   0.228938s |     0.002301 MB |   6.7253
 
 ## LZ4 Grid Search on Tunable Parameters for JS : 
-| Optimzed For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|-------------------|
 | Optimized Time | -3 | 4 |   65.37% |   0.004630s |     0.003145 MB |   2.8874
 | Optimized Peak Memory | 0 | 6 |   69.08% |   0.004874s |     0.002019 MB |   3.2343
 | Optimized Compression Percentage | 12 | 7 |   78.36% |   0.089520s |     0.002020 MB |   4.6205
 
 ## Snappy Performance for JS : 
-| Optimzed For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|
 | Optimized Snappy |   69.18% | 0.007227s | 0.005855 MB |   3.2447
 
@@ -555,6 +555,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
