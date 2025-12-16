@@ -138,7 +138,7 @@ Rough test results and insights mentioned below. Structured results present in o
 | Optimized Snappy |   79.56% | 0.005046s | 0.005855 MB |   4.8915
 
 ## HTML Compiled Performance
-| Optimzed For |  Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+| Optimized For |  Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|------------------------|------------|-------------------|-------------------|
 | Brotli - Optimized Time |   86.83% |   0.003225s |     0.003514 MB |   7.5909
 | Brotli - Optimized Peak Memory |   88.15% |   0.007674s |     0.002314 MB |   8.4416
@@ -154,6 +154,108 @@ Rough test results and insights mentioned below. Structured results present in o
 | LZ4 - Optimized Compression Percentage | 12 | 6 |   87.84% |   0.023204s |     0.002087 MB |   8.2254
 | Snappy |   79.56% | 0.005046s | 0.005855 MB |   4.8915
 
+# JS Performance Metrics
+## Brotli Grid search on tunable parameters for JS : 
+| Optimzed For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 0 | 0 | 18 |   76.46% |   0.006546s |     0.003686 MB |   4.2474
+| Optimized Peak Memory | 5 | 1 | 23 |   83.15% |   0.017284s |     0.002270 MB |   5.9355
+| Optimized Compression Percentage | 11 | 0 | 21 |   85.63% |   1.269449s |     0.002322 MB |   6.9584
+
+## GZip Grid Search on Tunable Parameters for JS : 
+| Optimzed For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|----------------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 2 |   77.45% |   0.012263s |     0.007233 MB |   4.4348
+| Optimized Peak Memory | 8 |   81.66% |   0.045796s |     0.006390 MB |   5.4515
+| Optimized Compression Percentage | 9 |   81.69% |   0.080125s |     0.006494 MB |   5.4602
+
+## ZSTD Grid Search on Tunable Parameters for JS : 
+| Optimzed For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|
+| Optimized Time | 4 |   80.20% |   0.007290s |     0.003898 MB |   5.0515
+| Optimized Peak Memory | 20 |   85.12% |   0.207782s |     0.002201 MB |   6.7185
+| Optimized Compression Percentage | 22 |   85.13% |   0.228938s |     0.002301 MB |   6.7253
+
+## LZ4 Grid Search on Tunable Parameters for JS : 
+| Optimzed For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|-------------------|
+| Optimized Time | -3 | 4 |   65.37% |   0.004630s |     0.003145 MB |   2.8874
+| Optimized Peak Memory | 0 | 6 |   69.08% |   0.004874s |     0.002019 MB |   3.2343
+| Optimized Compression Percentage | 12 | 7 |   78.36% |   0.089520s |     0.002020 MB |   4.6205
+
+## Snappy Performance for JS : 
+| Optimzed For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|
+| Optimized Snappy |   69.18% | 0.007227s | 0.005855 MB |   3.2447
+
+## JS Compiled Performance
+| Optimized For |  Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|------------------------|------------|-------------------|-------------------|
+| Brotli - Optimized Time |   76.46% |   0.006546s |     0.003686 MB |   4.2474
+| Brotli - Optimized Peak Memory |   83.15% |   0.017284s |     0.002270 MB |   5.9355
+| Brotli - Optimized Compression Percentage |   85.63% |   1.269449s |     0.002322 MB |   6.9584
+| GZip - Optimized Time | 77.45% |   0.012263s |     0.007233 MB |   4.4348
+| GZip - Optimized Peak Memory | 81.66% |   0.045796s |     0.006390 MB |   5.4515
+| GZip - Optimized Compression Percentage |   81.69% |   0.080125s |     0.006494 MB |   5.4602
+| ZSTD - Optimized Time |   80.20% |   0.007290s |     0.003898 MB |   5.0515
+| ZSTD - Optimized Peak Memory |   85.12% |   0.207782s |     0.002201 MB |   6.7185
+| ZSTD - Optimized Compression Percentage |   85.13% |   0.228938s |     0.002301 MB |   6.7253
+| LZ4 - Optimized Time |   65.37% |   0.004630s |     0.003145 MB |   2.8874
+| LZ4 - Optimized Peak Memory |   69.08% |   0.004874s |     0.002019 MB |   3.2343
+| LZ4 - Optimized Compression Percentage |   78.36% |   0.089520s |     0.002020 MB |   4.6205
+| Snappy |   69.18% | 0.007227s | 0.005855 MB |   3.2447
+
+
+# CSS Performance Metrics
+## Brotli Grid search on tunable parameters for CSS : 
+| Optimized For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 0 | 1 | 23 |   87.06% |   0.000601s |     0.002516 MB |   7.7306
+| Optimized Peak Memory | 1 | 2 | 16 |   86.11% |   0.000904s |     0.002356 MB |   7.1990
+| Optimized Compression Percentage | 11 | 0 | 18 |   93.16% |   0.152097s |     0.002374 MB |  14.6207
+
+## GZip Grid Search on Tunable Parameters for CSS : 
+| Optimized For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|----------------|------------------------|------------|-------------------|-------------------|
+| Optimized Time | 3 |   88.18% |   0.001475s |     0.007225 MB |   8.4622
+| Optimized Peak Memory | 9 |   90.82% |   0.004837s |     0.006275 MB |  10.8945
+| Optimized Compression Percentage | 9 |   90.82% |   0.004837s |     0.006275 MB |  10.8945
+
+## ZSTD Grid Search on Tunable Parameters for CSS : 
+| Optimized For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|
+| Optimized Time | 2 |   89.30% |   0.000961s |     0.003965 MB |   9.3452
+| Optimized Peak Memory | 22 |   92.80% |   0.052090s |     0.002134 MB |  13.8803
+| Optimized Compression Percentage | 22 |   92.80% |   0.052090s |     0.002134 MB |  13.8803
+
+## LZ4 Grid Search on Tunable Parameters for CSS : 
+| Optimized For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|------------|-------------------|
+| Optimized Time | 2 | 4 |   82.99% |   0.000646s |     0.002369 MB |   5.8778
+| Optimized Peak Memory | 11 | 0 |   89.57% |   0.004444s |     0.001910 MB |   9.5907
+| Optimized Compression Percentage | 12 | 5 |   89.62% |   0.005314s |     0.002369 MB |   9.6346
+
+## Snappy Performance for CSS : 
+| Optimized For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|---------|------|-------|------------------------|
+| Optimized Snappy |   81.12% | 0.004165s | 0.005744 MB |   5.2957
+
+## CSS Compiled Performance
+| Optimized For |  Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
+|--------------|------------------------|------------|-------------------|-------------------|
+| Brotli - Optimized Time |   87.06% |   0.000601s |     0.002516 MB |   7.7306
+| Brotli - Optimized Peak Memory |   86.11% |   0.000904s |     0.002356 MB |   7.1990
+| Brotli - Optimized Compression Percentage |   93.16% |   0.152097s |     0.002374 MB |  14.6207
+| GZip - Optimized Time |   88.18% |   0.001475s |     0.007225 MB |   8.4622
+| GZip - Optimized Peak Memory |   90.82% |   0.004837s |     0.006275 MB |  10.8945
+| GZip - Optimized Compression Percentage |   90.82% |   0.004837s |     0.006275 MB |  10.8945
+| ZSTD - Optimized Time |   89.30% |   0.000961s |     0.003965 MB |   9.3452
+| ZSTD - Optimized Peak Memory |   92.80% |   0.052090s |     0.002134 MB |  13.8803
+| ZSTD - Optimized Compression Percentage |   92.80% |   0.052090s |     0.002134 MB |  13.8803
+| LZ4 - Optimized Time |   82.99% |   0.000646s |     0.002369 MB |   5.8778
+| LZ4 - Optimized Peak Memory |   89.57% |   0.004444s |     0.001910 MB |   9.5907
+| LZ4 - Optimized Compression Percentage |   89.62% |   0.005314s |     0.002369 MB |   9.6346
+| Snappy |   81.12% | 0.004165s | 0.005744 MB |   5.2957
 
 
 ## Brotli Tunable parameters and what their ranges mean : 
@@ -453,6 +555,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
