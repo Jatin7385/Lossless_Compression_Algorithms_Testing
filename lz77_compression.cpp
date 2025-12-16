@@ -140,8 +140,8 @@ string get_serialized_string_from_token_arr(Token* compressed_data)
         // store next_char
         binary += compressed_data[i].next_char;
     }
-    cout << "LZ77 Serialized String :: " << binary << " :: Size :: " << binary.size() << endl;
-    cout << "Done :: " << endl;
+    // cout << "LZ77 Serialized String :: " << binary << " :: Size :: " << binary.size() << endl;
+    // cout << "Done :: " << endl;
     return binary;
 }
 
