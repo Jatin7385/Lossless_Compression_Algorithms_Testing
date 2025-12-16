@@ -45,9 +45,9 @@ Rough test results and insights mentioned below. Structured results present in o
 
 | Optimzed For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
-| Optimized Time | 0 | 0 | 23 |   91.10% |   0.001495s |     0.003472 MB |  91.0992
-| Optimized Peak Memory | 1 | 0 | 22 |   92.16% |   0.001662s |     0.002365 MB |  92.1617
-| Optimized Compression Percentage | 11 | 2 | 19 |   95.60% |   0.337135s |     0.002555 MB |  95.6035
+| Optimized Time | 0 | 0 | 23 |   91.10% |   0.001415s |     0.003537 MB |  11.2349
+| Optimized Peak Memory | 3 | 2 | 10 |   81.56% |   0.003139s |     0.002314 MB |   5.4241
+| Optimized Compression Percentage | 11 | 2 | 19 |   95.60% |   0.339854s |     0.002605 MB |  22.7455
 
 - Higher quality : Higher Compression Percentage : Slower Compression
 - Lower Quality : Lower compression percentage : Faster compression
@@ -62,45 +62,45 @@ Rough test results and insights mentioned below. Structured results present in o
 ## GZip Search on Tunable Parameter for Form Model JSON : 
 | Optimzed For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|----------------|------------------------|------------|-------------------|-------------------|
-| Optimized Time | 2 |   90.16% |   0.003016s |     0.007189 MB |  90.1555
-| Optimized Peak Memory | 9 |   92.96% |   0.012065s |     0.006218 MB |  92.9583
-| Optimized Compression Percentage | 9 |   92.96% |   0.012065s |     0.006218 MB |  92.9583
+| Optimized Time | 3 |   90.50% |   0.003147s |     0.007225 MB |  10.5318
+| Optimized Peak Memory | 9 |   92.96% |   0.012399s |     0.006429 MB |  14.2012
+| Optimized Compression Percentage | 9 |   92.96% |   0.012399s |     0.006429 MB |  14.2012
 
 ## ZSTD Search on Tunable Parameter for Form Model JSON : 
 | Optimzed For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|
-| Optimized Time | 2 |   92.51% |   0.001848s |     0.003965 MB |  92.5056
-| Optimized Peak Memory | 22 |   95.32% |   0.123986s |     0.002192 MB |  95.3205
-| Optimized Compression Percentage | 22 |   95.32% |   0.123986s |     0.002192 MB |  95.3205
+| Optimized Time | 3 |   92.84% |   0.001979s |     0.004005 MB |  13.9645
+| Optimized Peak Memory | 20 |   95.28% |   0.057491s |     0.002149 MB |  21.1681
+| Optimized Compression Percentage | 22 |   95.32% |   0.125617s |     0.002250 MB |  21.3697
 
 ## LZ4 Grid Search on Tunable Parameters for Form Model JSON : 
 | Optimzed For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
-|--------------|-------------------|------------|------------------------|------------|-------------------|-------------------|
-| Optimized Time | 2 | 4 |   88.37% |   0.001240s |     0.002039 MB |  88.3681
-| Optimized Peak Memory | 15 | 5 |   92.79% |   0.013395s |     0.001913 MB |  92.7854
-| Optimized Compression Percentage | 12 | 6 |   92.79% |   0.013101s |     0.002030 MB |  92.7900
+|--------------|---------|------|-------|------------------------|------------|-------------------|
+| Optimized Time | 2 | 5 |   88.38% |   0.001291s |     0.002087 MB |   8.6065
+| Optimized Peak Memory | 2 | 7 |   88.39% |   0.001332s |     0.001910 MB |   8.6150
+| Optimized Compression Percentage | 12 | 6 |   92.79% |   0.013155s |     0.001962 MB |  13.8697
 
 ## Snappy Does not have Tunable Parameters
 | Optimzed For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
-|--------------|------------------------|------------|-------------------|-------------------|
-| Optimized |   86.02% | 0.002113s | 0.005807 MB |  86.0183
+|--------------|---------|------|-------|------------------------|
+| Snappy |   86.02% | 0.002482s | 0.005855 MB |   7.1522
 
 
 ## Form Model JSON Performance
 | Optimzed For |  Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|------------------------|------------|-------------------|-------------------|
-| Brotli - Optimized Time  |   91.10% |   0.001495s |     0.003472 MB |  91.0992
-| Brotli -Optimized Peak Memory  |   92.16% |   0.001662s |     0.002365 MB |  92.1617
-| Brotli - Optimized Compression Percentage |   95.60% |   0.337135s |     0.002555 MB |  95.6035
-| GZip - Optimized Time |   90.16% |   0.003016s |     0.007189 MB |  90.1555
-| GZip - Optimized Peak Memory |   92.96% |   0.012065s |     0.006218 MB |  92.9583
-| GZip - Optimized Compression Percentage |   92.96% |   0.012065s |     0.006218 MB |  92.9583
-| ZSTD - Optimized Time |   92.51% |   0.001848s |     0.003965 MB |  92.5056
-| ZSTD - Optimized Peak Memory |   95.32% |   0.123986s |     0.002192 MB |  95.3205
-| ZSTD - Optimized Compression Percentage |   95.32% |   0.123986s |     0.002192 MB |  95.3205
-| LZ4 - Optimized Time |   88.37% |   0.001240s |     0.002039 MB |  88.3681
-| LZ4 - Optimized Peak Memory |  92.79% |   0.013395s |     0.001913 MB |  92.7854
-| LZ4 - Optimized Compression Percentage |   92.79% |   0.013101s |     0.002030 MB |  92.7900
+| Brotli - Optimized Time |   91.10% |   0.001415s |     0.003537 MB |  11.2349
+| Brotli - Optimized Peak Memory |   81.56% |   0.003139s |     0.002314 MB |   5.4241
+| Brotli - Optimized Compression Percentage |   95.60% |   0.339854s |     0.002605 MB |  22.7455
+| GZip - Optimized Time |   90.50% |   0.003147s |     0.007225 MB |  10.5318
+| GZip - Optimized Peak Memory |   92.96% |   0.012399s |     0.006429 MB |  14.2012
+| GZip - Optimized Compression Percentage |   92.96% |   0.012399s |     0.006429 MB |  14.2012
+| ZSTD - Optimized Time |   92.84% |   0.001979s |     0.004005 MB |  13.9645
+| ZSTD - Optimized Peak Memory |   95.28% |   0.057491s |     0.002149 MB |  21.1681
+| ZSTD - Optimized Compression Percentage |   95.32% |   0.125617s |     0.002250 MB |  21.3697
+| LZ4 - Optimized Time |   88.38% |   0.001291s |     0.002087 MB |   8.6065
+| LZ4 - Optimized Peak Memory |   88.39% |   0.001332s |     0.001910 MB |   8.6150
+| LZ4 - Optimized Compression Percentage |   92.79% |   0.013155s |     0.001962 MB |  13.8697
 | Snappy - Optimized |   86.02% | 0.002113s | 0.005807 MB |  86.0183
 
 # HTML Performance Metrics
@@ -453,6 +453,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
