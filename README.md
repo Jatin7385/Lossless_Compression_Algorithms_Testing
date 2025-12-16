@@ -107,52 +107,52 @@ Rough test results and insights mentioned below. Structured results present in o
 ## Brotli Grid search on tunable parameters for HTML : 
 | Optimzed For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|-------------------|-------------------|
-| Optimized Time | 0 | 2 | 24 |   86.83% |   0.003129s |     0.002472 MB |  86.8264
-| Optimized Peak Memory | 1 | 2 | 10 |   58.74% |   0.011534s |     0.002314 MB |  58.7383
-| Optimized Compression Percentage | 11 | 0 | 20 |   92.60% |   0.723852s |     0.002373 MB |  92.5959
+| Optimized Time | 0 | 0 | 24 |   86.83% |   0.003225s |     0.003514 MB |   7.5909
+| Optimized Peak Memory | 6 | 0 | 13 |   88.15% |   0.007674s |     0.002314 MB |   8.4416
+| Optimized Compression Percentage | 11 | 0 | 20 |   92.60% |   0.717705s |     0.002383 MB |  13.5059
 
 ## GZip Grid Search on Tunable Parameters for HTML : 
 | Optimzed For | Compress Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|----------------|------------------------|------------|-------------------|-------------------|
-| Optimized Time | 2 |   86.58% |   0.005109s |     0.007233 MB |  86.5781
-| Optimized Peak Memory | 8 |   89.19% |   0.013862s |     0.006392 MB |  89.1868
-| Optimized Compression Percentage | 9 |   89.20% |   0.018064s |     0.006551 MB |  89.2024
+| Optimized Time | 3 |   87.11% |   0.006509s |     0.007180 MB |   7.7586
+| Optimized Peak Memory | 9 |   89.20% |   0.017365s |     0.006388 MB |   9.2613
+| Optimized Compression Percentage | 9 |   89.20% |   0.017365s |     0.006388 MB |   9.2613
 
 ## ZSTD Grid Search on Tunable Parameters for HTML : 
 | Optimzed For | Level | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|------------|
-| Optimized Time | 4 |   89.75% |   0.003611s |     0.003898 MB |  89.7516
-| Optimized Peak Memory | 20 |   92.03% |   0.147063s |     0.002152 MB |  92.0334
-| Optimized Compression Percentage | 22 |   92.07% |   0.200937s |     0.002192 MB |  92.0714
+| Optimized Time | 3 |   89.74% |   0.003602s |     0.003957 MB |   9.7459
+| Optimized Peak Memory | 22 |   92.07% |   0.206914s |     0.002134 MB |  12.6126
+| Optimized Compression Percentage | 22 |   92.07% |   0.206914s |     0.002134 MB |  12.6126
 
 ## LZ4 Grid Search on Tunable Parameters for HTML : 
 | Optimzed For | Compression Level | Block Size | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
-|--------------|---------|------|-------|------------------------|------------|-------------------|
-| Optimized Time | 2 | 4 |   82.72% |   0.002466s |     0.001919 MB |  82.7180
-| Optimized Peak Memory | 16 | 5 |   87.84% |   0.023019s |     0.001864 MB |  87.8399
-| Optimized Compression Percentage | 12 | 6 |   87.84% |   0.022570s |     0.002080 MB |  87.8426
+|--------------|---------|------|-------|------------------------|-----------|--------|
+| Optimized Time | 2 | 5 |   82.75% |   0.002593s |     0.001970 MB |   5.7966
+| Optimized Peak Memory | 7 | 4 |   87.70% |   0.006764s |     0.001920 MB |   8.1334
+| Optimized Compression Percentage | 12 | 6 |   87.84% |   0.023204s |     0.002087 MB |   8.2254
 
 ## Snappy Performance for HTML : 
 | Optimzed For | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|---------|------|-------|------------------------|
-| Optimized Snappy |   79.56% | 0.004691s | 0.005855 MB |  79.5562
+| Optimized Snappy |   79.56% | 0.005046s | 0.005855 MB |   4.8915
 
 ## HTML Compiled Performance
 | Optimzed For |  Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
 |--------------|------------------------|------------|-------------------|-------------------|
-| Brotli - Optimized Time |   86.83% |   0.003129s |     0.002472 MB |  86.8264
-| Brotli - Optimized Peak Memory |   58.74% |   0.011534s |     0.002314 MB |  58.7383
-| Brotli - Optimized Compression Percentage |   92.60% |   0.723852s |     0.002373 MB |  92.5959
-| GZip - Optimized Time |   86.58% |   0.005109s |     0.007233 MB |  86.5781
-| GZip - Optimized Peak Memory |   89.19% |   0.013862s |     0.006392 MB |  89.1868
-| GZip - Optimized Compression Percentage |   89.20% |   0.018064s |     0.006551 MB |  89.2024
-| ZSTD - Optimized Time |   89.75% |   0.003611s |     0.003898 MB |  89.7516
-| ZSTD - Optimized Peak Memory |   92.03% |   0.147063s |     0.002152 MB |  92.0334
-| ZSTD - Optimized Compression Percentage |   92.07% |   0.200937s |     0.002192 MB |  92.0714
-| LZ4 - Optimized Time |   82.72% |   0.002466s |     0.001919 MB |  82.7180
-| LZ4 - Optimized Peak Memory |   87.84% |   0.023019s |     0.001864 MB |  87.8399
-| LZ4 - Optimized Compression Percentage |   87.84% |   0.022570s |     0.002080 MB |  87.8426
-| Snappy |   79.56% | 0.004691s | 0.005855 MB |  79.5562
+| Brotli - Optimized Time |   86.83% |   0.003225s |     0.003514 MB |   7.5909
+| Brotli - Optimized Peak Memory |   88.15% |   0.007674s |     0.002314 MB |   8.4416
+| Brotli - Optimized Compression Percentage |   92.60% |   0.717705s |     0.002383 MB |  13.5059
+| GZip - Optimized Time |   87.11% |   0.006509s |     0.007180 MB |   7.7586
+| GZip - Optimized Peak Memory |   89.20% |   0.017365s |     0.006388 MB |   9.2613
+| GZip - Optimized Compression Percentage |   89.20% |   0.017365s |     0.006388 MB |   9.2613
+| ZSTD - Optimized Time |   89.74% |   0.003602s |     0.003957 MB |   9.7459
+| ZSTD - Optimized Peak Memory |   92.07% |   0.206914s |     0.002134 MB |  12.6126
+| ZSTD - Optimized Compression Percentage |   92.07% |   0.206914s |     0.002134 MB |  12.6126
+| LZ4 - Optimized Time | 2 | 5 |   82.75% |   0.002593s |     0.001970 MB |   5.7966
+| LZ4 - Optimized Peak Memory | 7 | 4 |   87.70% |   0.006764s |     0.001920 MB |   8.1334
+| LZ4 - Optimized Compression Percentage | 12 | 6 |   87.84% |   0.023204s |     0.002087 MB |   8.2254
+| Snappy |   79.56% | 0.005046s | 0.005855 MB |   4.8915
 
 
 
@@ -453,6 +453,7 @@ Css Size : 0.172 MB
 
 
 ### Insights 
+
 
 
 
