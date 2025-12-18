@@ -160,9 +160,9 @@ Rough test results and insights mentioned below. Structured results present in o
 | Snappy |   79.56% | 0.005046s | 0.005855 MB |   4.8915
 
 ##################################################################
-| Direct Huffman | 57.1196% | x | x |  2.33207
-| LZ77 Compression | 86.7016% | x | x |  7.51973
-| Custom Deflate Impl | 89.3233% | x | x |  9.3662
+| Direct Huffman | 34.729% | x | x |  1.53207
+| LZ77 Compression | 79.1667% | x | x |  4.8
+| Custom Deflate Impl | 83.4046% | x | x |  6.02575
 
 # JS Performance Metrics
 ## Brotli Grid search on tunable parameters for JS : 
@@ -216,9 +216,9 @@ Rough test results and insights mentioned below. Structured results present in o
 | Snappy |   69.18% | 0.007227s | 0.005855 MB |   3.2447
 
 ##################################################################
-| Direct Huffman | 57.1196% | x | x |  2.33207
-| LZ77 Compression | 86.7016% | x | x |  7.51973
-| Custom Deflate Impl | 89.3233% | x | x |  9.3662
+| Direct Huffman | 44.7337% | x | x |  1.80942
+| LZ77 Compression | 64.5201% | x | x |  2.8185
+| Custom Deflate Impl | 71.642% | x | x |  3.52634
 
 
 # CSS Performance Metrics
@@ -273,9 +273,9 @@ Rough test results and insights mentioned below. Structured results present in o
 | Snappy |   81.12% | 0.004165s | 0.005744 MB |   5.2957
 
 ##################################################################
-| Direct Huffman | 57.1196% | x | x |  2.33207
-| LZ77 Compression | 86.7016% | x | x |  7.51973
-| Custom Deflate Impl | 89.3233% | x | x |  9.3662
+| Direct Huffman | 36.4418% | x | x |  1.57336
+| LZ77 Compression | 82.4449% | x | x |  5.69636
+| Custom Deflate Impl | 85.96% | x | x | 7.1225
 
 
 ## Brotli Tunable parameters and what their ranges mean : 
@@ -572,4 +572,5 @@ Css Size : 0.172 MB
 | **ZSTD**   | Best speed/size balance | Not all browser's support. Can have compatibility issues | Internal systems   |
 | **LZ4**    | Fastest algorithm       | Weak compression      | Real-time & streaming data |
 | **Snappy** | Very fast & stable      | Lowest compression    | Databases + RPC            |
+
 
