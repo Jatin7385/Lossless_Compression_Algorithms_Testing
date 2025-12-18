@@ -103,6 +103,11 @@ Rough test results and insights mentioned below. Structured results present in o
 | LZ4 - Optimized Compression Percentage |   92.79% |   0.013155s |     0.001962 MB |  13.8697
 | Snappy - Optimized |   86.02% | 0.002113s | 0.005807 MB |  86.0183
 
+##################################################################
+| Direct Huffman | 57.1196% | x | x |  2.33207
+| LZ77 Compression | 86.7016% | x | x |  7.51973
+| Custom Deflate Impl | 89.3233% | x | x |  9.3662
+
 # HTML Performance Metrics
 ## Brotli Grid search on tunable parameters for HTML : 
 | Optimized For | Quality | Mode | Lgwin | Compression Percentage | Time Taken | Peak Memory Usage | Compression Ratio |
@@ -153,6 +158,11 @@ Rough test results and insights mentioned below. Structured results present in o
 | LZ4 - Optimized Peak Memory |   87.70% |   0.006764s |     0.001920 MB |   8.1334
 | LZ4 - Optimized Compression Percentage |   87.84% |   0.023204s |     0.002087 MB |   8.2254
 | Snappy |   79.56% | 0.005046s | 0.005855 MB |   4.8915
+
+##################################################################
+| Direct Huffman | 57.1196% | x | x |  2.33207
+| LZ77 Compression | 86.7016% | x | x |  7.51973
+| Custom Deflate Impl | 89.3233% | x | x |  9.3662
 
 # JS Performance Metrics
 ## Brotli Grid search on tunable parameters for JS : 
@@ -205,6 +215,11 @@ Rough test results and insights mentioned below. Structured results present in o
 | LZ4 - Optimized Compression Percentage |   78.36% |   0.089520s |     0.002020 MB |   4.6205
 | Snappy |   69.18% | 0.007227s | 0.005855 MB |   3.2447
 
+##################################################################
+| Direct Huffman | 57.1196% | x | x |  2.33207
+| LZ77 Compression | 86.7016% | x | x |  7.51973
+| Custom Deflate Impl | 89.3233% | x | x |  9.3662
+
 
 # CSS Performance Metrics
 ## Brotli Grid search on tunable parameters for CSS : 
@@ -256,6 +271,11 @@ Rough test results and insights mentioned below. Structured results present in o
 | LZ4 - Optimized Peak Memory |   89.57% |   0.004444s |     0.001910 MB |   9.5907
 | LZ4 - Optimized Compression Percentage |   89.62% |   0.005314s |     0.002369 MB |   9.6346
 | Snappy |   81.12% | 0.004165s | 0.005744 MB |   5.2957
+
+##################################################################
+| Direct Huffman | 57.1196% | x | x |  2.33207
+| LZ77 Compression | 86.7016% | x | x |  7.51973
+| Custom Deflate Impl | 89.3233% | x | x |  9.3662
 
 
 ## Brotli Tunable parameters and what their ranges mean : 
@@ -552,3 +572,4 @@ Css Size : 0.172 MB
 | **ZSTD**   | Best speed/size balance | Not all browser's support. Can have compatibility issues | Internal systems   |
 | **LZ4**    | Fastest algorithm       | Weak compression      | Real-time & streaming data |
 | **Snappy** | Very fast & stable      | Lowest compression    | Databases + RPC            |
+
