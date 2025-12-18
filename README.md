@@ -544,41 +544,11 @@ Css Size : 0.172 MB
 - Snappy: Similar speed to LZ4 with 75.6% compression — tuned for ultra-low-latency use cases, not size reduction.
 
 
-## Conclusions/ Learnings
+## TL;DR Insights
 | Algo       | Strength                | Weakness              | Best Use Case              |
 | ---------- | ----------------------- | --------------------- | -------------------------- |
-| **Brotli** | Best compression        | Slow                  | Static frontend assets     |
-| **GZip**   | Standardized, balanced  | Older algorithm       | APIs, general purpose      |
-| **ZSTD**   | Best speed/size balance | Not browser-supported | Modern backend workloads   |
+| **Brotli** | Best compression        | Relatively much slower when tuned for higher compression                  | Static frontend assets     |
+| **GZip**   | Standardized, balanced - Decent compression at decent speeds  | Older algorithm       | APIs, general purpose      |
+| **ZSTD**   | Best speed/size balance | Not all browser's support. Can have compatibility issues | Internal systems   |
 | **LZ4**    | Fastest algorithm       | Weak compression      | Real-time & streaming data |
 | **Snappy** | Very fast & stable      | Lowest compression    | Databases + RPC            |
-
-
-### Insights 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
