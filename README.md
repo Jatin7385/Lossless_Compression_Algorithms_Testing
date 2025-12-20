@@ -569,8 +569,9 @@ Css Size : 0.172 MB
 | ---------- | ----------------------- | --------------------- | -------------------------- |
 | **Brotli** | Best compression        | Relatively much slower when tuned for higher compression                  | Static frontend assets     |
 | **GZip**   | Standardized, balanced - Decent compression at decent speeds  | Older algorithm       | APIs, general purpose      |
-| **ZSTD**   | Best speed/size balance | Not all browser's support. Can have compatibility issues | Internal systems   |
+| **ZSTD**   | Best speed/size balance | Not all browsers support. Can have compatibility issues | Internal systems   |
 | **LZ4**    | Fastest algorithm       | Weak compression      | Real-time & streaming data |
 | **Snappy** | Very fast & stable      | Lowest compression    | Databases + RPC            |
+
 
 
