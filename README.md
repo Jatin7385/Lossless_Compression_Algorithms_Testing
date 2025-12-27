@@ -6,6 +6,9 @@ Rough test results and insights mentioned below. Structured results present in o
 ## Custom Deflate Output validated with zlib deflate decompressor - Fixed Huffman Coding
 <img width="654" height="101" alt="image" src="https://github.com/user-attachments/assets/5dac92ce-ab06-48e8-9269-190524e1e13a" />
 
+## Custom GZip Output validated with gzip python decompressor - Fixed Huffman Coding
+<img width="616" height="119" alt="image" src="https://github.com/user-attachments/assets/0433f8e9-0b60-4d76-a502-7d23d5f4d2aa" />
+
 
 # Custom Implementation
 ## Huffman Encoding
@@ -576,6 +579,7 @@ Css Size : 0.172 MB
 | **ZSTD**   | Best speed/size balance | Not all browsers support. Can have compatibility issues | Internal systems   |
 | **LZ4**    | Fastest algorithm       | Weak compression      | Real-time & streaming data |
 | **Snappy** | Very fast & stable      | Lowest compression    | Databases + RPC            |
+
 
 
 
