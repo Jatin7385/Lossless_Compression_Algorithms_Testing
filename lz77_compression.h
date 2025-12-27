@@ -67,6 +67,108 @@ struct DeflateSymbol {
 };
 
 /*
+    RFC 1951 Length/Distance Code Conversion
+    
+    DEFLATE doesn't directly encode raw length/distance values.
+    Instead, it uses base codes + extra bits:
+    
+    For lengths (3-258):
+      - 29 base codes (257-285) that are Huffman-encoded
+      - 0-5 extra bits written directly to specify exact length within range
+      
+    For distances (1-32768):
+      - 30 base codes (0-29) that are Huffman-encoded  
+      - 0-13 extra bits written directly to specify exact distance within range
+    
+    This reduces the Huffman alphabet size significantly:
+      - Without: 256 length symbols, 32768 distance symbols
+      - With: 29 length codes, 30 distance codes
+*/
+
+// Result of converting a length or distance to DEFLATE code format
+struct DeflateCode {
+    uint16_t code;        // Base code (257-285 for length, 0-29 for distance)
+    uint8_t extra_bits;   // Number of extra bits to write (0-13)
+    uint16_t extra_val;   // Value of the extra bits
+};
+
+// A fully encoded DEFLATE symbol ready for Huffman encoding
+enum class EncodedSymbolType : uint8_t {
+    LITERAL,          // Code 0-255: raw byte
+    END_OF_BLOCK,     // Code 256: end marker
+    LENGTH_DISTANCE   // Code 257-285 + distance code 0-29
+};
+
+struct EncodedDeflateSymbol {
+    EncodedSymbolType type;
+    union {
+        uint8_t literal;  // For LITERAL (code = literal value)
+        struct {
+            DeflateCode length;    // Length code (257-285) + extra bits
+            DeflateCode distance;  // Distance code (0-29) + extra bits
+        } ref;
+    };
+};
+
+// ==================== Encoding (Compression) ====================
+
+/**
+    Convert a raw length (3-258) to DEFLATE code format.
+    @param length - Match length from LZ77 (must be 3-258)
+    @return DeflateCode with base code (257-285), extra_bits count, and extra_val
+*/
+DeflateCode length_to_deflate_code(uint16_t length);
+
+/**
+    Convert a raw distance (1-32768) to DEFLATE code format.
+    @param distance - Back-reference distance from LZ77 (must be 1-32768)
+    @return DeflateCode with base code (0-29), extra_bits count, and extra_val
+*/
+DeflateCode distance_to_deflate_code(uint16_t distance);
+
+/**
+    Convert LZ77 symbols to fully encoded DEFLATE symbols.
+    This converts raw length/distance values to base codes + extra bits.
+    @param symbols - Vector of LZ77 DeflateSymbols
+    @param debug - Enable debug output
+    @return Vector of EncodedDeflateSymbols ready for Huffman encoding
+*/
+std::vector<EncodedDeflateSymbol> convert_to_deflate_codes(
+    const std::vector<DeflateSymbol>& symbols, 
+    bool debug = false
+);
+
+// ==================== Decoding (Decompression) ====================
+
+/**
+    Convert a DEFLATE length code (257-285) + extra bits back to raw length (3-258).
+    @param code - Length code from Huffman decoding (257-285)
+    @param extra_val - Extra bits value
+    @return Raw length value (3-258)
+*/
+uint16_t deflate_code_to_length(uint16_t code, uint16_t extra_val);
+
+/**
+    Convert a DEFLATE distance code (0-29) + extra bits back to raw distance (1-32768).
+    @param code - Distance code from Huffman decoding (0-29)
+    @param extra_val - Extra bits value
+    @return Raw distance value (1-32768)
+*/
+uint16_t deflate_code_to_distance(uint16_t code, uint16_t extra_val);
+
+/**
+    Decompress EncodedDeflateSymbols back to original string.
+    This is used after Huffman decoding to reconstruct the original data.
+    @param symbols - Vector of EncodedDeflateSymbols (from Huffman decoder)
+    @param debug - Enable debug output
+    @return Decompressed string
+*/
+std::string lz77_decompress_encoded(
+    const std::vector<EncodedDeflateSymbol>& symbols,
+    bool debug = false
+);
+
+/*
   Function used to compress the input text using LZ77 Compression.
   @param input - string input
   @return vector<DeflateSymbol> - Vector of DeflateSymbols.
