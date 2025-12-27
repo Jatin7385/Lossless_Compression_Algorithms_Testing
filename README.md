@@ -3,6 +3,10 @@ Playing around with the most common lossless compression algorithms. Was interes
 
 Rough test results and insights mentioned below. Structured results present in our blog.
 
+## Custom Deflate Output validated with zlib deflate decompressor - Fixed Huffman Coding
+<img width="654" height="101" alt="image" src="https://github.com/user-attachments/assets/5dac92ce-ab06-48e8-9269-190524e1e13a" />
+
+
 # Custom Implementation
 ## Huffman Encoding
 <img width="1151" height="382" alt="image" src="https://github.com/user-attachments/assets/a45305b8-415f-438c-8c23-7164574a5032" />
@@ -572,6 +576,7 @@ Css Size : 0.172 MB
 | **ZSTD**   | Best speed/size balance | Not all browsers support. Can have compatibility issues | Internal systems   |
 | **LZ4**    | Fastest algorithm       | Weak compression      | Real-time & streaming data |
 | **Snappy** | Very fast & stable      | Lowest compression    | Databases + RPC            |
+
 
 
 
