@@ -124,7 +124,7 @@ int main()
         return 1;
     }
 
-    // 1. Header
+    // 1. Header - Static Headers for now.
     out.put(0x1f);
     out.put(0x8b);
     out.put(0x08); // Deflate
@@ -133,13 +133,14 @@ int main()
     out.put(0x00); // XFL
     out.put(0x03); // Unix
 
-    // 2. Deflate data
+    // 2. Deflate data - There seems to be an issue with the deflate stream not matching standard format.
     out.write(deflate_compressed.data.data(), deflate_compressed.data.size());    
 
     // 3. CRC32
     CRC32 crc;
     uint32_t checksum = crc.compute(reinterpret_cast<const uint8_t*>(input.data()), input.size());
     
+    // Little Endian Format --> Format to store bytes. LSB comes first. MSB comes later.
     auto write_le32 = [&](uint32_t v) {
         out.put(v & 0xFF);
         out.put((v >> 8) & 0xFF);
@@ -147,9 +148,10 @@ int main()
         out.put((v >> 24) & 0xFF);
     };
 
+    // Checksum to be stored in Little Endian Format.
     write_le32(checksum);
     
-    // 4. ISIZE
+    // 4. ISIZE - To be stored in Little Endian Format.
     write_le32(input.size());
 
     return 0;

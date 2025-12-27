@@ -8,29 +8,35 @@
 
 // Huffman Result structure to store the string result and the total bits used.
 struct HuffmanResult {
-    std::string data;
+    std::uint32_t bytes; // packed bits - Numerical codes - Bit aligned(Can start at any bit offset 1,3,5 and not necessarily multiples of 8).
     size_t total_bits;
 };
 
-struct BitReader {
-    const std::string& data;
-    size_t bit_pos = 0;
-    size_t total_bits;
-
-    BitReader(const std::string& d, size_t bits)
-        : data(d), total_bits(bits) {}
-
-    bool has_bits() const {
-        return bit_pos < total_bits;
-    }
-
-    int read_bit() {
-        size_t byte_idx = bit_pos / 8;
-        size_t bit_idx  = 7 - (bit_pos % 8);
-        bit_pos++;
-        return (data[byte_idx] >> bit_idx) & 1;
-    }
+// Huffman Bit Packed Result structure to store the string result and the total bits used.
+struct BitPackedResult {
+    std::vector<uint8_t> data;  // bit-packed bytes
+    size_t total_bits;           // total number of bits used
 };
+
+// struct BitReader {
+//     const std::uint16_t & data;
+//     size_t bit_pos = 0;
+//     size_t total_bits;
+
+//     BitReader(const std::string& d, size_t bits)
+//         : data(d), total_bits(bits) {}
+
+//     bool has_bits() const {
+//         return bit_pos < total_bits;
+//     }
+
+//     int read_bit() {
+//         size_t byte_idx = bit_pos / 8;
+//         size_t bit_idx  = 7 - (bit_pos % 8);
+//         bit_pos++;
+//         return (data[byte_idx] >> bit_idx) & 1;
+//     }
+// };
 
 // Node structure for the Huffman Tree
 struct Node { // Structs and Classes are the same in C++. Default member access and Inheritance in Structs are public by default and private in classes by default.
@@ -142,6 +148,19 @@ HuffmanResult get_encoded_text(std::string& text, std::unordered_map<char,std::s
 HuffmanResult get_encoded_bitpacked_text(std::string& text, std::unordered_map<char, std::string>& huffmanCode);
 
 /** 
+  build_canonical_codes function generates canonical huffman codes.
+  @param unordered_map<int, int> huffman_code_lengths - Extracted code lengths
+  @param unordered_map<int, HuffmanResult> huffman_out_codes - Output canonical codes.
+  @param bool debug - Debug Flag
+  @return void - Output codes are stored in huffman_out_codes object.
+*/
+void build_canonical_codes(
+    std::unordered_map<int, int>& huffman_code_lengths,
+    std::unordered_map<int, HuffmanResult>& huffman_out_codes,
+    bool debug
+);
+
+/** 
     Function to decode the encoded text.
     @param Node* root : Pointer to the Root of the Huffman Tree
     @param int &index : Reference to the index of the current character
@@ -153,21 +172,21 @@ void get_decode_text(Node* root, int &index,std::string& encoded_text,std::strin
 
 /** 
     Function to decode the bit packed encoded text.
-    @param Node* root : Pointer to the Root of the Huffman Tree
-    @param string &packed : Reference to the packed string.
-    @param size_t total_bits : Total Bits
+    @param vector<uint8_t>& packed_data : Referemce to the packed data
+    @param string &canonical_codes : Reference to the Canonical Codes.
     @param bool debug : debug flag
     @return std::string decoded_text
 */
-std::string get_bit_packed_decoded_text(Node* root, const std::string& packed, size_t total_bits, bool debug = false);
+std::string get_bit_packed_decoded_text(std::vector<uint8_t>& packed_data,
+                             std::unordered_map<int, HuffmanResult>& canonical_codes, bool debug = false);
 
 /**
     All encompassing function to take in the input and return compressed output.
     @param string input
     @param bool debug
-    @returns HuffmanResult : The HuffmanResult structure holding the encoded text and the total bits used.
+    @returns BitPackedResult : The BitPackedResult structure holding the encoded text and the total bits used.
 */
-HuffmanResult huffman_encoding_compress(std::string& input, bool bit_packed = false, bool debug = false);
+BitPackedResult huffman_encoding_compress(std::string& input, bool bit_packed = false, bool debug = false);
 
 /**
     All encompassing function to take in the compressed input and return decompressed output.
