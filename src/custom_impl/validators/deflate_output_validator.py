@@ -1,7 +1,7 @@
 import zlib
 
 # Read your raw deflate-compressed data
-with open("output.deflate", "rb") as f:
+with open("../output.deflate", "rb") as f:
     compressed = f.read()
 
 try:

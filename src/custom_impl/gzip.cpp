@@ -106,15 +106,17 @@ public:
 };
 
 
+// Only compile main when building this file standalone
+// #ifdef GZIP_STANDALONE
 int main()
 {
     // string input = readFile("./data.txt");
     string input = "Gzip compression is a lossless compression.";
+    cout << "Input: " << input << endl;
     cout << "Input size: " << input.size() << endl;
-    HuffmanResult deflate_compressed = deflate_compress(input);
-    cout << "Deflate compressed size: " << deflate_compressed.data.size() << endl;
-    cout << "Deflate compressed data: " << deflate_compressed.data << endl;
-    cout << "Deflate compressed total bits: " << deflate_compressed.total_bits << endl;
+    DeflateResult deflate_compressed = deflate_compress(input);
+    cout << "Deflate Compressed: " << deflate_compressed.data.size() << " bytes" << endl;
+    cout << "Deflate Compressed Total Bits: " << deflate_compressed.total_bits << endl;
 
     // Write it to a .gz file.
     ofstream out("gzip_output.gz", ios::binary);
@@ -134,7 +136,7 @@ int main()
     out.put(0x03); // Unix
 
     // 2. Deflate data - There seems to be an issue with the deflate stream not matching standard format.
-    out.write(deflate_compressed.data.data(), deflate_compressed.data.size());    
+    out.write(reinterpret_cast<const char*>(deflate_compressed.data.data()), deflate_compressed.data.size()); 
 
     // 3. CRC32
     CRC32 crc;
@@ -156,3 +158,4 @@ int main()
 
     return 0;
 }
+// #endif

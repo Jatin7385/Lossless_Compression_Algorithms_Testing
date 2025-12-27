@@ -138,7 +138,8 @@ string deflate_decompress(const vector<uint8_t>& data, bool debug) {
 // ============================================================================
 // Main
 // ============================================================================
-
+// Only compile main when building this file standalone
+#ifdef DEFLATE_STANDALONE
 int main() {
     cout << "================== RFC 1951 DEFLATE ==================" << endl;
     
@@ -159,3 +160,4 @@ int main() {
     
     return 0;
 }
+#endif
