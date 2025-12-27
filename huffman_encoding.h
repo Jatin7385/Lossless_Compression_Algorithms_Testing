@@ -172,13 +172,16 @@ void get_decode_text(Node* root, int &index,std::string& encoded_text,std::strin
 
 /** 
     Function to decode the bit packed encoded text.
-    @param vector<uint8_t>& packed_data : Referemce to the packed data
-    @param string &canonical_codes : Reference to the Canonical Codes.
+    @param vector<uint8_t>& packed_data : Reference to the packed data
+    @param size_t total_bits : Total number of valid bits to decode
+    @param unordered_map<int, HuffmanResult>& canonical_codes : Reference to the Canonical Codes.
     @param bool debug : debug flag
     @return std::string decoded_text
 */
 std::string get_bit_packed_decoded_text(std::vector<uint8_t>& packed_data,
-                             std::unordered_map<int, HuffmanResult>& canonical_codes, bool debug = false);
+                             size_t total_bits,
+                             std::unordered_map<int, HuffmanResult>& canonical_codes, 
+                             bool debug = false);
 
 /**
     All encompassing function to take in the input and return compressed output.
@@ -190,11 +193,13 @@ BitPackedResult huffman_encoding_compress(std::string& input, bool bit_packed = 
 
 /**
     All encompassing function to take in the compressed input and return decompressed output.
-    @param string compressed_input
+    @param vector<uint8_t>& compressed_input
+    @param int total_bits : Total number of valid bits to decode
+    @param unordered_map<int, HuffmanResult>& huffman_out_codes : Reference to the Canonical Codes.
     @param bool debug
     @returns string decompressed output
 */
-std::string huffman_encoding_decompress(std::string& compressed_input, bool bit_packed, int total_bits, bool debug = false);
+std::string huffman_encoding_decompress(std::vector<uint8_t>& compressed_input, int total_bits, std::unordered_map<int, HuffmanResult>& huffman_out_codes, bool debug = false);
 
 /**
     Function to free the memory allocated recursively to the Huffman Tree.

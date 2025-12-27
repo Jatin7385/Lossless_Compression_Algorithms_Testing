@@ -24,7 +24,6 @@
 
 using namespace std; // Use std namespace to avoid writing std:: prefix
 
-Node* root;
 
 // Quick Notes : 
 // int* p -> p is a pointer to an integer
@@ -116,9 +115,10 @@ Node* build_huffman_tree(unordered_map<char, int>& freq_map, bool debug)
 	}
     
     // If Debug mode is enabled, print the heap contents.
-    // if (debug) print_heap(min_heap);
-    // print_heap(min_heap);
-    std::cout << "Heap Contents : " << min_heap->pq.size() << std::endl;
+    if (debug) {
+        std::cout << "Heap Contents : " << min_heap->pq.size() << std::endl;
+        // print_heap(min_heap);  // Note: This would empty the heap
+    }
 
     // While the heap has more than one node, do the following :
     while (min_heap->pq.size() > 1) {
@@ -211,17 +211,21 @@ BitPackedResult get_encoded_bitpacked_text(
     unordered_map<int, HuffmanResult>& canonical_codes,
     bool debug = false
 ) {
+    if (text.empty()) {
+        return {{}, 0};  // Handle empty input
+    }
+    
     size_t total_bits = 0;
-    for (char c : text) total_bits += canonical_codes.at(c).total_bits;
+    for (unsigned char c : text) total_bits += canonical_codes.at(c).total_bits;
 
     std::vector<uint8_t> packed((total_bits + 7) / 8, 0); // Add 7 before dividing by 8 to round up to the nearest byte,
 // ensuring all bits fit without truncation.
 
     size_t bit_pos = 0;
 
-    for (char c : text) {
+    for (unsigned char c : text) {
         HuffmanResult hr = canonical_codes.at(c);
-        for (int i = 0; i < hr.total_bits; i++) {
+        for (size_t i = 0; i < hr.total_bits; i++) {
             size_t byte_idx = bit_pos / 8;
             size_t bit_idx = bit_pos % 8;  // LSB first
             if (hr.bytes & (1 << i)) {
@@ -276,48 +280,94 @@ void get_decode_text(Node* root, int &index, string& encoded_text, string& decod
 		get_decode_text(root->right, index, encoded_text, decoded_text, debug);
 }
 
+/**
+  Helper function to reverse bits in a code value.
+  This is needed for DEFLATE's LSB-first bit packing to maintain prefix-free property.
+  @param uint32_t code - The original code value
+  @param int length - Number of bits in the code
+  @return uint32_t - The bit-reversed code
+*/
+uint32_t reverse_bits(uint32_t code, int length) {
+    uint32_t reversed = 0;
+    for (int i = 0; i < length; i++) {
+        if (code & (1 << i)) {
+            reversed |= (1 << (length - 1 - i));
+        }
+    }
+    return reversed;
+}
+
 /** 
     Function to decode the bit packed encoded text.
-    @param vector<uint8_t>& packed_data : Referemce to the packed data
-    @param string &canonical_codes : Reference to the Canonical Codes.
+    @param vector<uint8_t>& packed_data : Reference to the packed data
+    @param size_t total_bits : Total number of valid bits to decode
+    @param unordered_map<int, HuffmanResult>& canonical_codes : Reference to the Canonical Codes.
     @param bool debug : debug flag
     @return std::string decoded_text
 */
 string get_bit_packed_decoded_text(vector<uint8_t>& packed_data,
+                             size_t total_bits,
                              unordered_map<int, HuffmanResult>& canonical_codes,
                              bool debug) {
 
     // Reverse map: code -> symbol (code stored LSB-first)
-    unordered_map<uint32_t, pair<int,uint8_t>> code_to_symbol;
+    unordered_map<uint32_t, pair<int, uint8_t>> code_to_symbol;
     for (auto& [sym, hr] : canonical_codes) {
-        code_to_symbol[hr.bytes] = {sym, hr.total_bits};
+        code_to_symbol[hr.bytes] = {sym, static_cast<uint8_t>(hr.total_bits)};
+        if (debug) cout << "Symbol :: " << sym << " :: Code :: " << hr.bytes << " :: Length :: " << hr.total_bits << endl;
+        if (debug) cout << "Reversed Code :: " << reverse_bits(hr.bytes, hr.total_bits) << endl;
     }
 
     string decoded;
     uint32_t buffer = 0;
     int bits_in_buffer = 0;
+    size_t bits_consumed = 0;
+    size_t byte_idx = 0;
 
-    for (uint8_t byte : packed_data) {
-        buffer |= (byte << bits_in_buffer); // append byte LSB-first
-        bits_in_buffer += 8;
+    while (bits_consumed < total_bits) {
+        // Load more bytes into buffer if needed (keep buffer reasonably full)
+        while (bits_in_buffer < 24 && byte_idx < packed_data.size()) {
+            // Merging the bytes into the buffer.
+            /*
+            Before: buffer = [... existing bits ...]
+            After:  buffer = [... existing bits ... | new_byte]
+                                                    ↑
+                                        shifted left by bits_in_buffer
+            */
+            buffer |= (static_cast<uint32_t>(packed_data[byte_idx]) << bits_in_buffer);
+            bits_in_buffer += 8;
+            byte_idx++;
+        }
 
-        // Try to match codes in buffer
-        bool matched_any = true;
-        while (bits_in_buffer > 0 && matched_any) {
-            matched_any = false;
-            for (auto& [code, sym_len] : code_to_symbol) {
-                int len = sym_len.second;
-                if (len > bits_in_buffer) continue;
+        // Try to find a matching code
+        bool matched = false;
+        for (auto& [code, sym_len] : code_to_symbol) {
+            uint8_t len = sym_len.second;
+            if (len > bits_in_buffer) continue;
 
-                uint32_t mask = (1U << len) - 1;
-                if ((buffer & mask) == code) {
-                    decoded += static_cast<char>(sym_len.first);
-                    buffer >>= len;
-                    bits_in_buffer -= len;
-                    matched_any = true;
-                    break;
-                }
+            // U means unsigned int. 1U means 1 as an unsigned 32 bit int.
+            /*
+            1U = 00000001 (in binary for 32 bits) = 1 (in decimal)
+            1U << 5 = 00100000 (binary for 32 bits) = 32 (in decimal)
+            */
+            uint32_t mask = (1U << len) - 1;
+            if ((buffer & mask) == code) { // buffer & mask extracts the lowest N bits of the buffer.
+                decoded += static_cast<char>(sym_len.first);
+                buffer >>= len;
+                bits_in_buffer -= len;
+                bits_consumed += len;
+                matched = true;
+                break;
             }
+        }
+
+        if (!matched) {
+            // Error: no matching code found
+            if (debug) {
+                cout << "Decoding error: no matching code found at bits_consumed=" 
+                     << bits_consumed << ", bits_in_buffer=" << bits_in_buffer << endl;
+            }
+            break;
         }
     }
 
@@ -346,6 +396,9 @@ void free_huffman_tree(Node* root)
   @param unordered_map<int, HuffmanResult> huffman_out_codes - Output canonical codes.
   @param bool debug - Debug Flag
   @return void - Output codes are stored in huffman_out_codes object.
+  
+  Note: Codes are stored in bit-reversed order for DEFLATE's LSB-first packing.
+  This ensures the prefix-free property is maintained when matching from LSB.
 */
 void build_canonical_codes(
     unordered_map<int, int>& huffman_code_lengths,
@@ -475,15 +528,23 @@ void build_canonical_codes(
         // If we go deeper in the tree, descend left until we reach the required depth.
         code <<= (s.length-prevLen);
         
+        // Reverse bits for LSB-first packing (DEFLATE requirement)
+        // This ensures prefix-free property is maintained when matching from LSB
+        uint32_t reversed_code = reverse_bits(code, s.length);
+        
         huffman_out_codes[s.symbol] = {
-            code,
+            reversed_code, // To Store from LSB to MSB. -- As per Deflate RFC 1951.
             (uint8_t)s.length
         };
 
         if (debug) {
             std::cout << "Symbol " << s.symbol
-                      << " : code = "
+                      << " :: Representing :: " << (char) s.symbol
+                      << " :: Code :: " << code
+                      << " : canonical = "
                       << std::bitset<32>(code).to_string().substr(32 - s.length)
+                      << " -> reversed = "
+                      << std::bitset<32>(reversed_code).to_string().substr(32 - s.length)
                       << " (" << s.length << ")\n";
         }
 
@@ -502,7 +563,7 @@ void build_canonical_codes(
 }
 
 
-BitPackedResult huffman_encoding_compress(string& input, bool bit_packed, bool debug)
+BitPackedResult huffman_encoding_compress(string& input, bool /*bit_packed*/, bool debug)
 {
     // Variables
     unordered_map<char, int> freq_map; // Hash Table to store the frequency of each character
@@ -527,36 +588,22 @@ BitPackedResult huffman_encoding_compress(string& input, bool bit_packed, bool d
     // Get Encoded Text
     BitPackedResult encoded_text = get_encoded_bitpacked_text(input, huffman_out_codes, debug);
 
+    free_huffman_tree(root);
+
     return encoded_text;
 }
 
 
 
-// string huffman_encoding_decompress(string& compressed_input, bool bit_packed_flag, int total_bits, bool debug)
-// {
+string huffman_encoding_decompress(vector<uint8_t>& compressed_input, int total_bits, unordered_map<int, HuffmanResult>& huffman_out_codes, bool debug)
+{
 
-//     // cout << "Bit packed << " << bit_packed_flag :: endl;
-//     // Decode the Encoded Text
-//     // traverse the Huffman Tree again and this time
-// 	// decode the encoded string
-//     string decoded_text = "";
-//     if (!bit_packed_flag)
-//     {
-//         int index = -1;
-//         while ((index + 1) < (int)compressed_input.size()) {
-//             get_decode_text(root, index, compressed_input, decoded_text, debug);
-//         }
-//     } else
-//     {
-//         decoded_text = get_bit_packed_decoded_text(root, compressed_input, total_bits, debug);
-//     }
-// 	if (debug) std::cout << "Decoded Text : " << decoded_text << std::endl;
+    string decoded_text = "";
+    decoded_text = get_bit_packed_decoded_text(compressed_input, total_bits, huffman_out_codes, debug);
+	if (debug) std::cout << "Decoded Text : " << decoded_text << std::endl;
 
-//     // Free the memory allocated to the Huffman Tree.
-//     free_huffman_tree(root);
-
-//     return decoded_text;
-// }
+    return decoded_text;
+}
 
 
 // /** 
@@ -569,7 +616,7 @@ int main()
     unordered_map<char, int> freq_map; // Hash Table to store the frequency of each character
     unordered_map<int, int> huffman_code_lengths;
     unordered_map<int, HuffmanResult> huffman_out_codes;
-    bool debug = true; // Flag to enable debug mode - Print debug logs if true.
+    bool debug = false; // Flag to enable debug mode - Print debug logs if true.
     
     
     // Input text
@@ -593,10 +640,12 @@ int main()
     // Get Encoded Text
     BitPackedResult encoded_text = get_encoded_bitpacked_text(text, huffman_out_codes, debug);
 
-    // Now that we have our packed bits ready. huffman_out_codes - which is the table used for decoding refernce is sent in a header.
+    // Now that we have our packed bits ready. huffman_out_codes - which is the table used for decoding reference is sent in a header.
 
-    string decoded = get_bit_packed_decoded_text(encoded_text.data, huffman_out_codes, debug);
+    string decoded = get_bit_packed_decoded_text(encoded_text.data, encoded_text.total_bits, huffman_out_codes, debug);
     cout << "Decoded string :: " << decoded << endl;
+
+    cout << "Decompression Verified Status :: " << (text == decoded) << endl;
 
     // Free the memory allocated to the Huffman Tree.
     free_huffman_tree(root);
