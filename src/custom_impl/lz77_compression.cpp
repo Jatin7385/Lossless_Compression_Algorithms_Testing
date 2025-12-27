@@ -12,23 +12,10 @@ int look_ahead_buffer_size = 258; //  Size of the look ahead buffer -- THe buffe
 
 // ============================================================================
 // RFC 1951 Length/Distance Code Tables (Section 3.2.5)
+// Defined here, declared extern in lz77_compression.h
 // ============================================================================
 
-/*
-    Length Code Table
-    Each entry: {base_length, code, extra_bits}
-    
-    The code is what gets Huffman-encoded (257-285).
-    The extra_bits are written directly after the Huffman code.
-    extra_val = length - base_length
-*/
-struct LengthTableEntry {
-    uint16_t base_length;
-    uint16_t code;
-    uint8_t extra_bits;
-};
-
-static const LengthTableEntry LENGTH_TABLE[] = {
+const LengthTableEntry LENGTH_TABLE[] = {
     {3,   257, 0},  {4,   258, 0},  {5,   259, 0},  {6,   260, 0},
     {7,   261, 0},  {8,   262, 0},  {9,   263, 0},  {10,  264, 0},
     {11,  265, 1},  {13,  266, 1},  {15,  267, 1},  {17,  268, 1},
@@ -38,23 +25,9 @@ static const LengthTableEntry LENGTH_TABLE[] = {
     {131, 281, 5},  {163, 282, 5},  {195, 283, 5},  {227, 284, 5},
     {258, 285, 0}   // Special case: length 258 has code 285, 0 extra bits
 };
-static const int LENGTH_TABLE_SIZE = sizeof(LENGTH_TABLE) / sizeof(LENGTH_TABLE[0]);
+const int LENGTH_TABLE_SIZE = sizeof(LENGTH_TABLE) / sizeof(LENGTH_TABLE[0]);
 
-/*
-    Distance Code Table
-    Each entry: {base_distance, code, extra_bits}
-    
-    The code is what gets Huffman-encoded (0-29).
-    The extra_bits are written directly after the Huffman code.
-    extra_val = distance - base_distance
-*/
-struct DistanceTableEntry {
-    uint16_t base_distance;
-    uint8_t code;
-    uint8_t extra_bits;
-};
-
-static const DistanceTableEntry DISTANCE_TABLE[] = {
+const DistanceTableEntry DISTANCE_TABLE[] = {
     {1,     0,  0},  {2,     1,  0},  {3,     2,  0},  {4,     3,  0},
     {5,     4,  1},  {7,     5,  1},  {9,     6,  2},  {13,    7,  2},
     {17,    8,  3},  {25,    9,  3},  {33,   10,  4},  {49,   11,  4},
@@ -64,7 +37,7 @@ static const DistanceTableEntry DISTANCE_TABLE[] = {
     {4097, 24, 11},  {6145, 25, 11},  {8193, 26, 12},  {12289, 27, 12},
     {16385, 28, 13}, {24577, 29, 13}
 };
-static const int DISTANCE_TABLE_SIZE = sizeof(DISTANCE_TABLE) / sizeof(DISTANCE_TABLE[0]);
+const int DISTANCE_TABLE_SIZE = sizeof(DISTANCE_TABLE) / sizeof(DISTANCE_TABLE[0]);
 
 /**
     Convert a raw length (3-258) to DEFLATE code format.
@@ -406,6 +379,8 @@ string lz77_decompress(const vector<DeflateSymbol>& symbols, bool debug) {
     return output;
 }
 
+// Only compile main when building this file standalone
+#ifdef LZ77_STANDALONE
 int main()
 {
     string text = "The computerphile channel handles computer topics.";
@@ -457,3 +432,4 @@ int main()
     
     return 0;
 }
+#endif

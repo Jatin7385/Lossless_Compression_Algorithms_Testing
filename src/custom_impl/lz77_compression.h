@@ -5,6 +5,40 @@
 #include <string>
 #include <vector>
 
+// ============================================================================
+// RFC 1951 Length/Distance Code Tables (Section 3.2.5)
+// ============================================================================
+
+/*
+    Length Code Table - Maps raw lengths (3-258) to DEFLATE codes (257-285)
+    Each entry: {base_length, code, extra_bits}
+    
+    The code is what gets Huffman-encoded.
+    The extra_bits are written directly after the Huffman code.
+    extra_val = length - base_length
+*/
+struct LengthTableEntry {
+    uint16_t base_length;
+    uint16_t code;
+    uint8_t extra_bits;
+};
+
+extern const LengthTableEntry LENGTH_TABLE[];
+extern const int LENGTH_TABLE_SIZE;
+
+/*
+    Distance Code Table - Maps raw distances (1-32768) to DEFLATE codes (0-29)
+    Each entry: {base_distance, code, extra_bits}
+*/
+struct DistanceTableEntry {
+    uint16_t base_distance;
+    uint8_t code;
+    uint8_t extra_bits;
+};
+
+extern const DistanceTableEntry DISTANCE_TABLE[];
+extern const int DISTANCE_TABLE_SIZE;
+
 /*
     RFC 1951 DEFLATE Symbol Types
     
