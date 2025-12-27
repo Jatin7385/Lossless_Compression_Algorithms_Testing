@@ -9,23 +9,17 @@ using namespace std;
 int search_buffer_size = 32768;  // 32KB = 2^15 // Size of the search buffer -- The substring already parsed.
 int look_ahead_buffer_size = 258; //  Size of the look ahead buffer -- THe buffer ahead of the 
                                 // current character to be searched for maximum possible match 
-int counter = 0; // Counter to input data into the Tokens Array
 
 /*
   Function used to compress the input text using LZ77 Compression.
   @param input - string input
-  @return Token* - Pointer of the first token of the Token array.
+  @return vector<DeflateSymbol> - Vector of DeflateSymbols.
 */
-Token* lz77_compress(string input, bool debug)
+vector<DeflateSymbol> lz77_compress(string input, bool debug)
 {
-    int input_length = input.length();
-    /* Token Array in the worst case can be the length of input 
-       Imagine input length to be 26 and input to be 'abcdefghi....z'
-       Here, our final output will be an uncompressed Token array of size 26 
-       with each Token having an offset and length of 0.
-    */
-    Token* output = new Token[input_length];
-    int index = 0; // Current index variable while parsing the string
+    size_t input_length = input.length();
+    vector<DeflateSymbol> output;
+    size_t index = 0; // Current index variable while parsing the string
 
     string search_buffer;
 
@@ -35,28 +29,26 @@ Token* lz77_compress(string input, bool debug)
         // This gives us the corrected start index. 
         // If <=0 then we start from 0, and move index positions, 
         // else start from corrected_index for a length of search_buffer_size
-        int corrected_start_index = (index - search_buffer_size) <= 0 ? 0 : (index - search_buffer_size);
-        int corrected_search_buffer_length = (corrected_start_index == 0) ? index : search_buffer_size;
+        size_t corrected_start_index = (index < (size_t)search_buffer_size) ? 0 : (index - search_buffer_size);
+        size_t corrected_search_buffer_length = (corrected_start_index == 0) ? index : (size_t)search_buffer_size;
         // If index - search_buffer_size <= 0, that means, search_buffer will 
         // start from 0, and be of the index's size. Once it's more than 0, 
         // we start sliding it.
         search_buffer = input.substr(corrected_start_index, corrected_search_buffer_length); 
 
         // Now we find the longest possible match.
-        int match_length = 0;
+        size_t match_length = 0;
         /*
         Steps : 
             - We loop through the search buffer till input[index] matches.
-            - Once we find match_index, we start incrementing match_length and comparing strings. - Another way is compare chars.
-            - Once the match stops, index - match_index = offset ||| match_length is the length. ||| input[index + 1] = next_char.
+            - Once we find match_index, we start incrementing match_length and comparing strings.
+            - Once the match stops, we emit either a back-reference or a literal.
         */
-        // Initializing Token with init values
-        Token token;
-        token.offset = 0;
-        token.length_of_match = 0;
+        size_t best_offset = 0;
+        size_t best_length = 0;
 
         // Looping through search buffer to find matches.
-        for (int i = 0; i < corrected_search_buffer_length; i++)
+        for (size_t i = 0; i < corrected_search_buffer_length; i++)
         {
             match_length = 0;
             // Finding a match for char at index in search_buffer
@@ -66,153 +58,141 @@ Token* lz77_compress(string input, bool debug)
                 while (
                     (index + match_length) < input.length() && // Out of bound check
                     (i + match_length) < corrected_search_buffer_length && // Out of bound check
-                    match_length < look_ahead_buffer_size && // Look Ahead Buffer Size Check
+                    match_length < (size_t)look_ahead_buffer_size && // Look Ahead Buffer Size Check
                     input[index + match_length] == search_buffer[i + match_length] // Equality check
                 ) {
                     match_length += 1;
-                    // cout << "Matching :: " << input[index + match_length+1] << " == " << search_buffer[i + match_length+1] << " :: match_length : " << match_length << " :: i : " << i << endl;
                 }
                 
-                if (token.length_of_match < match_length) // Max match check
+                // Minimum match length is 3 - prevents small matches from inflating compressed size
+                if (match_length >= 3 && best_length < match_length)
                 {
-                    token.length_of_match = match_length;
-                    token.offset = index - (corrected_start_index + i);
+                    best_length = match_length;
+                    best_offset = index - (corrected_start_index + i);
                 }
             }
         }
-        token.next_char = (index + token.length_of_match) < input.length() ? input[index + token.length_of_match] : '\0';
-        if(debug) cout << "Index : " << index << " :: Current Char : " << input[index] << " :: search_buffer : " << search_buffer << " :: Offset : " << token.offset << " :: Length : " << token.length_of_match << " :: Next Char : " << token.next_char << " :: Matched String : " << input.substr(index, token.length_of_match) << " :: " << input.substr(index, token.length_of_match).length() << endl;
-
-        // Appending it to the Tokens array
-        output[counter] = token;
-        counter++;
-        // cout << "Updated Index :: " << index << " : " << (length+1) << " :: " << (index + length + 1)  << endl;
-        index = index + (token.length_of_match+1); // Increment index/current position by maximum length of match.
+        
+        if (best_length >= 3) {
+            // Emit back-reference
+            DeflateSymbol sym;
+            sym.type = SymbolType::BACK_REFERENCE;
+            sym.ref.length = best_length;
+            sym.ref.distance = best_offset;
+            output.push_back(sym);
+            
+            if (debug) {
+                cout << "Index: " << index 
+                     << " :: BACK_REF(len=" << best_length 
+                     << ", dist=" << best_offset << ")"
+                     << " :: Matched: \"" << input.substr(index, best_length) << "\"" << endl;
+            }
+            
+            index += best_length;  // No +1, no trailing char!
+        } else {
+            // Emit literal
+            DeflateSymbol sym;
+            sym.type = SymbolType::LITERAL;
+            sym.literal = input[index];
+            output.push_back(sym);
+            
+            if (debug) {
+                cout << "Index: " << index 
+                     << " :: LITERAL('" << input[index] << "')" << endl;
+            }
+            
+            index++;
+        }
     }
 
+
+    // End of Block// End of block marker
+    DeflateSymbol end;
+    end.type = SymbolType::END_OF_BLOCK;
+    output.push_back(end);
+
+    // Returning the Output Vector
     return output;
 }
 
-// Unserialize and return Token Array
-Token* unserialize_tokens(const string& binary, int& out_token_count)
-{
-    const int BYTES_PER_TOKEN = 5;
-
-    if (binary.size() % BYTES_PER_TOKEN != 0) {
-        cerr << "Corrupt LZ77 stream\n";
-        return nullptr;
-    }
-
-    out_token_count = binary.size() / BYTES_PER_TOKEN;
-    Token* tokens = new Token[out_token_count];
-
-    int idx = 0;
-    for (int i = 0; i < out_token_count; i++) {
-        uint8_t b0 = (uint8_t)binary[idx++];
-        uint8_t b1 = (uint8_t)binary[idx++];
-        uint8_t b2 = (uint8_t)binary[idx++];
-        uint8_t b3 = (uint8_t)binary[idx++];
-
-        tokens[i].offset =
-            (b0 << 8) | b1;
-
-        tokens[i].length_of_match =
-            (b2 << 8) | b3;
-
-        tokens[i].next_char = binary[idx++];
-    }
-
-    return tokens;
-}
-
-
-string get_serialized_string_from_token_arr(Token* compressed_data)
-{
-    string binary = "";
-    for (int i = 0; i < counter; i++) {
-        // store offset and length as 2 bytes each
-        binary += (char)((compressed_data[i].offset >> 8) & 0xFF);
-        binary += (char)(compressed_data[i].offset & 0xFF);
-
-        binary += (char)((compressed_data[i].length_of_match >> 8) & 0xFF);
-        binary += (char)(compressed_data[i].length_of_match & 0xFF);
-
-        // store next_char
-        binary += compressed_data[i].next_char;
-    }
-    // cout << "LZ77 Serialized String :: " << binary << " :: Size :: " << binary.size() << endl;
-    // cout << "Done :: " << endl;
-    return binary;
-}
-
-string get_string_from_token_arr(Token* compressed_data)
-{
-    string lz77_compressed_string = "";
-    int compressed_length = 0;
-    for (int i = 0; i < counter; i++)
-    {
-        lz77_compressed_string += compressed_data[i].next_char;
-        cout << compressed_data[i].next_char;
-        compressed_length++;
-    }
-    return lz77_compressed_string;
-}
-
 /*
-    Function to decompress data using LZ77 Decompression Algorithm.
-    @param Token* compressed : Pointer for Compressed Token Array.
-    @return string - decompressed data
+    Function to decompress DEFLATE LZ77 symbols back to original string.
+    @param symbols - Vector of DeflateSymbols
+    @param debug - Enable debug output
+    @return Decompressed string
 */
-string lz77_decompress(Token* compressed)
-{
-    string decompressed_text = "";
-    int pos = 0;
-    // Loop through the Token array
-    for(int i = 0; i < counter; i++)
-    {
-        // If offset is greater than 0, then we go back and reconstruct.
-        if(compressed[i].offset > 0)
-        {
-            int start = (pos - compressed[i].offset);
-            int len = compressed[i].length_of_match;
-            while (len > 0) 
-            {
-                decompressed_text += decompressed_text[start]; // Decompression happens with decompressed data.
-                start++;
-                len--;
-                pos++;
+string lz77_decompress(const vector<DeflateSymbol>& symbols, bool debug) {
+    string output;
+    
+    for (const auto& sym : symbols) {
+        switch (sym.type) {
+            case SymbolType::LITERAL:
+                output += sym.literal;
+                if (debug) cout << "Decompress: LITERAL('" << sym.literal << "')" << endl;
+                break;
+                
+            case SymbolType::BACK_REFERENCE: {
+                size_t start = output.length() - sym.ref.distance;
+                if (debug) {
+                    cout << "Decompress: BACK_REF(len=" << sym.ref.length 
+                         << ", dist=" << sym.ref.distance << ") -> \"";
+                }
+                for (int i = 0; i < sym.ref.length; i++) {
+                    char c = output[start + i];
+                    output += c;
+                    if (debug) cout << c;
+                }
+                if (debug) cout << "\"" << endl;
+                break;
             }
-        } 
-        // '\0' is for checking char Null
-        if (compressed[i].next_char != '\0') decompressed_text += compressed[i].next_char;
-        pos++;
+            
+            case SymbolType::END_OF_BLOCK:
+                if (debug) cout << "Decompress: END_OF_BLOCK" << endl;
+                return output;
+        }
     }
-
-    return decompressed_text;
+    
+    return output;
 }
 
-// int main()
-// {
-//     // string text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-//     string text = "The computerphile channel handles computer topics.";
-//     cout << "Sizeof Char :: " << sizeof(char) << " :: Sizeof Int :: " << sizeof(uint8_t) << endl;
-//     cout << "Original Text to be compressed :: " << text << " :: Size :: " << (sizeof(char) * text.length()) << endl;
-//     Token* compressed_data = lz77_compress(text);
-
-//     cout << "Compressed Data :: ";
-//     int compressed_length = 0;
-//     for (int i = 0; i < counter; i++)
-//     {
-//         cout << compressed_data[i].next_char;
-//         compressed_length++;
-//     }
-
-//     cout << " :: Size : " << (counter * (sizeof(uint8_t) * 2 + sizeof(char))) << endl;
-
-//     string decompressed_data = lz77_decompress(compressed_data);
-//     cout << "Decompressed Data :: " << decompressed_data << " :: Size : " << (sizeof(char) * decompressed_data.length()) << endl;
-
-//     // Memory leaks prevention
-//     delete[] compressed_data;
-//     return 0;
-// }
+int main()
+{
+    string text = "The computerphile channel handles computer topics.";
+    bool debug = true;
+    
+    cout << "Original Text :: \"" << text << "\"" << endl;
+    cout << "Original Size :: " << text.length() << " bytes" << endl;
+    cout << "----------------------------------------" << endl;
+    
+    // Compress
+    vector<DeflateSymbol> compressed = lz77_compress(text, debug);
+    
+    cout << "----------------------------------------" << endl;
+    cout << "Symbol count :: " << compressed.size() << endl;
+    
+    // Count literals vs back-references
+    int literals = 0, refs = 0;
+    for (const auto& sym : compressed) {
+        if (sym.type == SymbolType::LITERAL) literals++;
+        else if (sym.type == SymbolType::BACK_REFERENCE) refs++;
+    }
+    cout << "Literals: " << literals << ", Back-references: " << refs << endl;
+    
+    // Estimate compressed size (simplified: 1 byte per literal, 4 bytes per ref)
+    size_t estimated_size = literals * 1 + refs * 4 + 1; // +1 for end marker
+    cout << "Estimated compressed size :: " << estimated_size << " bytes" << endl;
+    
+    cout << "----------------------------------------" << endl;
+    
+    // Decompress and verify
+    string decompressed = lz77_decompress(compressed, false);
+    cout << "Decompressed Text :: \"" << decompressed << "\"" << endl;
+    cout << "Decompressed Size :: " << decompressed.length() << " bytes" << endl;
+    
+    // Verify
+    bool match = (text == decompressed);
+    cout << "----------------------------------------" << endl;
+    cout << "Verification :: " << (match ? "SUCCESS ✓" : "FAILED ✗") << endl;
+    
+    return 0;
+}

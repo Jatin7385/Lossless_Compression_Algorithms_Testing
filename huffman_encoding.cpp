@@ -251,35 +251,6 @@ BitPackedResult get_encoded_bitpacked_text(
     return {packed, total_bits};
 }
 
-/** 
-    Function to decode the encoded text.
-    @param Node* root : Pointer to the Root of the Huffman Tree
-    @param int &index : Reference to the index of the current character
-    @param string str : The encoded text
-    @param string& decoded_text : Reference to the decoded text
-    @return void
-*/
-void get_decode_text(Node* root, int &index, string& encoded_text, string& decoded_text, bool debug)
-{
-	if (root == nullptr) {
-		return;
-	}
-
-	// found a leaf node
-	if (!root->left && !root->right)
-	{
-		decoded_text += root->data;
-		return;
-	}
-
-	index++;
-
-	if (encoded_text[index] =='0')
-		get_decode_text(root->left, index, encoded_text, decoded_text, debug);
-	else
-		get_decode_text(root->right, index, encoded_text, decoded_text, debug);
-}
-
 /**
   Helper function to reverse bits in a code value.
   This is needed for DEFLATE's LSB-first bit packing to maintain prefix-free property.

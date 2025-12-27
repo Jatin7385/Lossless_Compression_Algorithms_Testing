@@ -1,0 +1,5 @@
+# Compression Libraries
+Brotli==1.2.0
+lz4==4.4.5
+python-snappy==0.7.3
+zstandard==0.25.0
