@@ -1,4 +1,10 @@
 # Lossless Compression Algorithms Testing : 
+
+
+- https://medium.com/@jatin.dhall7385/from-fast-to-ultra-small-brotli-gzip-zstd-lz4-snappy-on-real-web-assets-part-1-the-209ca13347ed
+- https://medium.com/@jatin.dhall7385/from-fast-to-ultra-small-brotli-gzip-zstd-lz4-snappy-on-real-web-assets-part-2-benchmarks-233de638b52d
+
+### These are basically rough notes for myself. For a more comprehensive overview check out the above urls.
 Playing around with the most common lossless compression algorithms. Was interested in how they perform for our use cases, so tried profiling the performance of the algorithms to get real-world insights.
 
 Rough test results and insights mentioned below. Structured results present in our blog.
@@ -579,6 +585,7 @@ Css Size : 0.172 MB
 | **ZSTD**   | Best speed/size balance | Not all browsers support. Can have compatibility issues | Internal systems   |
 | **LZ4**    | Fastest algorithm       | Weak compression      | Real-time & streaming data |
 | **Snappy** | Very fast & stable      | Lowest compression    | Databases + RPC            |
+
 
 
 
